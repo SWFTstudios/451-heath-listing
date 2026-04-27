@@ -212,6 +212,7 @@ for i, feat in enumerate(features):
 #  PAGE 2
 # ═══════════════════════════════════════════════════
 pdf.add_page()
+pdf.set_auto_page_break(auto=False)  # everything on p2 is manually positioned
 
 # ── Thin header
 pdf.set_fill_color(*CREAM)
@@ -229,7 +230,7 @@ pdf.cell(CW * 0.45, 7, "PHOTO TOUR", align="R")
 GRID_Y = 16
 GAP    = 4
 PH_W   = (CW - GAP) / 2
-PH_H   = 60
+PH_H   = 50
 grid_photos = [
     (IMG / "photo2.jpg", "KITCHEN"),
     (IMG / "photo3.jpg", "BEDROOM"),
@@ -281,13 +282,13 @@ rows = [
     ("Parking",          "Included"),
     ("Pets",             "Considered case-by-case"),
 ]
-ROW_H = 7.2
+ROW_H = 6.8
 KEY_W = CW * 0.38
 for i, (k, v) in enumerate(rows):
     bg = CREAM_MID if i % 2 == 0 else WHITE
     pdf.set_fill_color(*bg)
     pdf.rect(M, TBL_Y, CW, ROW_H, "F")
-    pdf.set_xy(M + 4, TBL_Y + 1.2)
+    pdf.set_xy(M + 4, TBL_Y + 1.0)
     pdf.set_font("Arial", "", 8.5)
     pdf.set_text_color(*MUTED)
     pdf.cell(KEY_W, 5.5, k)
@@ -297,29 +298,29 @@ for i, (k, v) in enumerate(rows):
     TBL_Y += ROW_H
 
 # ── Agent card
-CARD_Y = TBL_Y + 8
-CARD_H = 54
+CARD_Y = TBL_Y + 5
+CARD_H = 52
 pdf.set_fill_color(*INK)
 pdf.rect(M, CARD_Y, CW, CARD_H, "F")
 
 pdf.set_font("Arial", "B", 7.5)
 pdf.set_text_color(*ACCENT)
-pdf.set_xy(M + 10, CARD_Y + 8)
+pdf.set_xy(M + 10, CARD_Y + 6)
 pdf.cell(CW - 20, 6, "YOUR LISTING AGENT")
 
 pdf.set_font("Arial", "B", 18)
 pdf.set_text_color(*WHITE)
-pdf.set_xy(M + 10, CARD_Y + 15)
+pdf.set_xy(M + 10, CARD_Y + 13)
 pdf.cell(CW - 20, 10, "Roosevelt Hall")
 
 pdf.set_font("Arial", "", 8.5)
 pdf.set_text_color(*LIGHT_INK)
-pdf.set_xy(M + 10, CARD_Y + 26)
+pdf.set_xy(M + 10, CARD_Y + 23)
 pdf.cell(CW - 20, 6, "REALTOR\u00ae  \u00b7  Coldwell Banker Realty  \u00b7  50 Broadway, Hillsdale, NJ 07642")
 
 pdf.set_font("Arial", "B", 9)
 pdf.set_text_color(*WHITE)
-pdf.set_xy(M + 10, CARD_Y + 33)
+pdf.set_xy(M + 10, CARD_Y + 30)
 pdf.cell(54, 6, "Mobile: (201) 280-6333")
 pdf.set_font("Arial", "", 9)
 pdf.set_text_color(*LIGHT_INK)
@@ -327,17 +328,17 @@ pdf.cell(CW - 64, 6, "Office: (201) 599-1100")
 
 pdf.set_font("Arial", "I", 7.5)
 pdf.set_text_color(*FAINT)
-pdf.set_xy(M + 10, CARD_Y + 40)
+pdf.set_xy(M + 10, CARD_Y + 37)
 pdf.cell(CW - 20, 6, "realtor.com/realestateagents/5673e76b89a689010069dbc1")
 
 # Divider + closing line
 pdf.set_draw_color(55, 52, 48)
 pdf.set_line_width(0.3)
-pdf.line(M + 10, CARD_Y + CARD_H - 11, M + CW - 10, CARD_Y + CARD_H - 11)
+pdf.line(M + 10, CARD_Y + CARD_H - 10, M + CW - 10, CARD_Y + CARD_H - 10)
 pdf.set_line_width(0.2)
 pdf.set_font("Arial", "", 7.5)
 pdf.set_text_color(110, 106, 100)
-pdf.set_xy(M + 10, CARD_Y + CARD_H - 9)
+pdf.set_xy(M + 10, CARD_Y + CARD_H - 8)
 pdf.cell(CW - 20, 6,
     "To schedule a showing, contact Roosevelt directly or reply to this email.",
     align="C")
