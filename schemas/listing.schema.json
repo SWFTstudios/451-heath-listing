@@ -1,0 +1,216 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://example.com/schemas/listing.schema.json",
+  "title": "Listing",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "id",
+    "property",
+    "agent",
+    "site",
+    "assets",
+    "theme"
+  ],
+  "properties": {
+    "id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "property": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "address_line1",
+        "unit",
+        "city",
+        "state",
+        "zip",
+        "county",
+        "rent",
+        "bedrooms",
+        "bathrooms",
+        "sqft",
+        "year_built",
+        "property_type",
+        "style",
+        "floor",
+        "available",
+        "offer",
+        "description_paragraphs",
+        "chips",
+        "features",
+        "details",
+        "neighborhood",
+        "map_query"
+      ],
+      "properties": {
+        "address_line1": { "type": "string", "minLength": 1 },
+        "unit": { "type": "string", "minLength": 1 },
+        "city": { "type": "string", "minLength": 1 },
+        "state": { "type": "string", "minLength": 2, "maxLength": 2 },
+        "zip": { "type": "string", "minLength": 5 },
+        "county": { "type": "string", "minLength": 1 },
+        "rent": { "type": "number", "minimum": 0 },
+        "bedrooms": { "type": "number", "minimum": 0 },
+        "bathrooms": { "type": "number", "minimum": 0 },
+        "sqft": { "type": "number", "minimum": 0 },
+        "year_built": { "type": "number", "minimum": 1700 },
+        "property_type": { "type": "string", "minLength": 1 },
+        "style": { "type": "string", "minLength": 1 },
+        "floor": { "type": "string", "minLength": 1 },
+        "available": { "type": "string", "minLength": 1 },
+        "offer": { "type": "string", "minLength": 1 },
+        "description_paragraphs": {
+          "type": "array",
+          "minItems": 1,
+          "items": { "type": "string", "minLength": 1 }
+        },
+        "chips": {
+          "type": "array",
+          "minItems": 1,
+          "items": { "type": "string", "minLength": 1 }
+        },
+        "features": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": ["name", "description"],
+            "properties": {
+              "name": { "type": "string", "minLength": 1 },
+              "description": { "type": "string", "minLength": 1 }
+            }
+          }
+        },
+        "details": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": ["key", "value"],
+            "properties": {
+              "key": { "type": "string", "minLength": 1 },
+              "value": { "type": "string", "minLength": 1 }
+            }
+          }
+        },
+        "neighborhood": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": ["name", "description"],
+            "properties": {
+              "name": { "type": "string", "minLength": 1 },
+              "description": { "type": "string", "minLength": 1 }
+            }
+          }
+        },
+        "map_query": { "type": "string", "minLength": 1 },
+        "hero_alt": { "type": "string", "default": "" }
+      }
+    },
+    "agent": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "name",
+        "title",
+        "brokerage",
+        "office_address",
+        "mobile",
+        "office",
+        "profile_url"
+      ],
+      "properties": {
+        "name": { "type": "string", "minLength": 1 },
+        "title": { "type": "string", "minLength": 1 },
+        "brokerage": { "type": "string", "minLength": 1 },
+        "office_address": { "type": "string", "minLength": 1 },
+        "mobile": { "type": "string", "minLength": 1 },
+        "office": { "type": "string", "minLength": 1 },
+        "profile_url": { "type": "string", "minLength": 1 }
+      }
+    },
+    "site": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "lead_email",
+        "site_url",
+        "pdf_url",
+        "disclaimer"
+      ],
+      "properties": {
+        "lead_email": { "type": "string", "minLength": 3 },
+        "site_url": { "type": "string", "minLength": 1 },
+        "pdf_url": { "type": "string", "minLength": 1 },
+        "disclaimer": { "type": "string", "minLength": 1 }
+      }
+    },
+    "assets": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "hero",
+        "photos"
+      ],
+      "properties": {
+        "hero": { "type": "string", "minLength": 1 },
+        "photos": {
+          "type": "array",
+          "minItems": 5,
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": ["file", "label", "alt"],
+            "properties": {
+              "file": { "type": "string", "minLength": 1 },
+              "label": { "type": "string", "minLength": 1 },
+              "alt": { "type": "string", "minLength": 1 }
+            }
+          }
+        }
+      }
+    },
+    "theme": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "style",
+        "palette"
+      ],
+      "properties": {
+        "style": { "type": "string", "minLength": 1 },
+        "palette": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "ink",
+            "accent",
+            "cream",
+            "cream_mid",
+            "white",
+            "muted",
+            "light_ink",
+            "faint"
+          ],
+          "properties": {
+            "ink": { "type": "string", "pattern": "^#[0-9A-Fa-f]{6}$" },
+            "accent": { "type": "string", "pattern": "^#[0-9A-Fa-f]{6}$" },
+            "cream": { "type": "string", "pattern": "^#[0-9A-Fa-f]{6}$" },
+            "cream_mid": { "type": "string", "pattern": "^#[0-9A-Fa-f]{6}$" },
+            "white": { "type": "string", "pattern": "^#[0-9A-Fa-f]{6}$" },
+            "muted": { "type": "string", "pattern": "^#[0-9A-Fa-f]{6}$" },
+            "light_ink": { "type": "string", "pattern": "^#[0-9A-Fa-f]{6}$" },
+            "faint": { "type": "string", "pattern": "^#[0-9A-Fa-f]{6}$" }
+          }
+        }
+      }
+    }
+  }
+}
