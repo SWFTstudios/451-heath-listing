@@ -115,6 +115,7 @@
       padding: 9px 20px; border-radius: var(--r-pill);
       font-size: .8125rem; font-weight: 600;
       display: flex; align-items: center; gap: 7px;
+      white-space: nowrap;
       transition: background .2s, transform .15s;
     }
     .nav-cta:hover { background: var(--ink-mid); transform: translateY(-1px); }
@@ -603,6 +604,7 @@
     }
     @media (max-width: 640px) {
       .nav-links { display: none; }
+      .nav-cta { padding: 8px 14px; font-size: .75rem; gap: 5px; }
       .photo-grid {
         grid-template-columns: 1fr 1fr;
         grid-template-rows: 200px 200px;
