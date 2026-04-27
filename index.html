@@ -510,18 +510,36 @@
     #contact { background: var(--white); }
     .contact-layout { display: grid; grid-template-columns: 1fr 1fr; gap: 56px; margin-top: 48px; }
     .contact-left p { font-size: .9375rem; color: var(--ink-mid); line-height: 1.8; margin-bottom: 28px; }
-    .contact-row {
-      display: flex; align-items: center; gap: 12px;
-      font-size: .875rem; color: var(--ink-mid); margin-bottom: 14px;
-    }
-    .contact-row svg { width: 17px; height: 17px; color: var(--accent); flex-shrink: 0; }
-    .contact-row a { color: inherit; transition: color .2s; }
-    .contact-row a:hover { color: var(--ink); }
-    .contact-form-full {
+    .contact-quick-facts {
       background: var(--cream-mid); border: 1px solid var(--border);
-      border-radius: var(--r); padding: 32px;
+      border-radius: var(--r); padding: 22px 24px;
     }
-    .cf-title { font-weight: 700; font-size: 1rem; color: var(--ink); margin-bottom: 20px; }
+    .cqf-title { font-size: .78rem; font-weight: 700; letter-spacing: .10em; text-transform: uppercase; color: var(--ink-muted); margin-bottom: 14px; }
+    .cqf-row { display: flex; justify-content: space-between; font-size: .85rem; padding: 8px 0; border-bottom: 1px solid var(--border); }
+    .cqf-row:last-child { border-bottom: none; }
+    .cqf-key { color: var(--ink-muted); }
+    .cqf-val { font-weight: 600; color: var(--ink); }
+
+    /* tabs */
+    .form-card {
+      background: var(--cream-mid); border: 1px solid var(--border);
+      border-radius: var(--r); padding: 28px;
+    }
+    .form-tabs {
+      display: flex; gap: 4px; margin-bottom: 24px;
+      background: var(--white); border: 1.5px solid var(--border);
+      border-radius: var(--r-pill); padding: 4px;
+    }
+    .form-tab {
+      flex: 1; padding: 9px 14px; border-radius: var(--r-pill);
+      border: none; background: transparent;
+      font-size: .8125rem; font-weight: 600; cursor: pointer;
+      color: var(--ink-muted); transition: all .2s; font-family: inherit;
+    }
+    .form-tab.active { background: var(--ink); color: var(--white); }
+    .form-panel { display: none; }
+    .form-panel.active { display: block; }
+
     .cf-row { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
     .cf-group { display: flex; flex-direction: column; gap: 6px; margin-bottom: 12px; }
     .cf-label { font-size: .78rem; font-weight: 600; color: var(--ink-mid); }
@@ -542,7 +560,20 @@
       transition: background .2s; margin-top: 4px;
     }
     .cf-submit:hover { background: var(--ink-mid); }
+    .cf-submit:disabled { opacity: .6; cursor: not-allowed; }
     .cf-status { text-align: center; font-size: .78rem; color: var(--ink-muted); margin-top: 10px; min-height: 16px; }
+    .cf-helper { font-size: .8rem; color: var(--ink-muted); line-height: 1.5; margin-bottom: 18px; }
+    .cf-success {
+      display: none; text-align: center; padding: 28px 16px;
+    }
+    .cf-success-icon {
+      width: 52px; height: 52px; border-radius: 50%;
+      background: #dcfce7; display: flex; align-items: center; justify-content: center;
+      margin: 0 auto 14px;
+    }
+    .cf-success-icon svg { width: 26px; height: 26px; color: #16a34a; }
+    .cf-success h4 { font-weight: 700; font-size: 1rem; color: var(--ink); margin-bottom: 6px; }
+    .cf-success p { font-size: .85rem; color: var(--ink-muted); }
 
     /* ─── FOOTER ─────────────────────────────────────────── */
     footer {
@@ -808,8 +839,9 @@
 
           <hr class="cc-divider" />
 
-          <!-- Quick inquiry form -->
-          <form class="cc-form" onsubmit="handleQuickForm(event)">
+          <!-- Quick tour request — formsubmit AJAX -->
+          <form class="cc-form" id="sidebarForm">
+            <input type="hidden" name="_captcha" value="false" />
             <input class="cc-input" type="text" name="name" placeholder="Your name" required />
             <input class="cc-input" type="email" name="email" placeholder="Email address" required />
             <input class="cc-input" type="tel" name="phone" placeholder="Phone (optional)" />
@@ -972,69 +1004,101 @@
   </div>
 </section>
 
-<!-- ─── CONTACT FULL ────────────────────────────────────────── -->
+<!-- ─── CONTACT ──────────────────────────────────────────────── -->
 <section id="contact">
   <div class="container">
     <p class="eyebrow reveal">Get in Touch</p>
-    <h2 class="section-title reveal reveal-delay-1">Interested? Let's Talk.</h2>
+    <h2 class="section-title reveal reveal-delay-1">Ready to Make a Move?</h2>
     <div class="contact-layout">
+
+      <!-- Left: description + quick facts -->
       <div class="contact-left reveal reveal-delay-2">
-        <p>This garden-style condo won't be available for long. Reach out to schedule a private showing or ask any questions about the unit, lease terms, or move-in timeline.</p>
-        <!--
-          ★ UPDATE YOUR CONTACT INFO BELOW ★
-        -->
-        <div class="contact-row">
-          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/></svg>
-          <a href="mailto:your@email.com">your@email.com</a>
-        </div>
-        <div class="contact-row">
-          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z"/></svg>
-          <a href="tel:+15551234567">(555) 123-4567</a>
-        </div>
-        <div class="contact-row">
-          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
-          451 Heath Place, Apt 2, Hackensack, NJ 07601
+        <p>This garden-style condo moves fast. Schedule a private showing or have the full listing details — including your agent's contact info — sent straight to your inbox.</p>
+        <div class="contact-quick-facts">
+          <p class="cqf-title">Quick Facts</p>
+          <div class="cqf-row"><span class="cqf-key">Monthly Rent</span><span class="cqf-val">$1,925</span></div>
+          <div class="cqf-row"><span class="cqf-key">Special Offer</span><span class="cqf-val">1 Month Free by May 15</span></div>
+          <div class="cqf-row"><span class="cqf-key">Size</span><span class="cqf-val">663 sq ft · 1 Bed · 1 Bath</span></div>
+          <div class="cqf-row"><span class="cqf-key">Included</span><span class="cqf-val">Heat · Hot Water · Parking</span></div>
+          <div class="cqf-row"><span class="cqf-key">Style</span><span class="cqf-val">Garden · 2nd Floor Walk-Up</span></div>
+          <div class="cqf-row"><span class="cqf-key">Pets</span><span class="cqf-val">Considered</span></div>
         </div>
       </div>
 
+      <!-- Right: tabbed forms -->
       <div class="reveal reveal-delay-3">
-        <div class="contact-form-full">
-          <p class="cf-title">Request a Showing</p>
-          <!--
-            Wire this up: sign up at formspree.io → get your endpoint URL →
-            set action="https://formspree.io/f/YOUR_ID" method="POST"
-          -->
-          <form onsubmit="handleFullForm(event)">
-            <div class="cf-row">
-              <div class="cf-group">
-                <label class="cf-label" for="cfFirst">First Name</label>
-                <input class="cf-input" id="cfFirst" type="text" name="first" placeholder="Jane" required />
+        <div class="form-card">
+          <div class="form-tabs" role="tablist">
+            <button class="form-tab active" onclick="switchTab('tour', this)" role="tab">Schedule a Tour</button>
+            <button class="form-tab" onclick="switchTab('info', this)" role="tab">Send Me the Info</button>
+          </div>
+
+          <!-- ── TAB 1: Schedule a Tour ── -->
+          <div class="form-panel active" id="panel-tour">
+            <div class="cf-success" id="success-tour">
+              <div class="cf-success-icon">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>
+              </div>
+              <h4>Request Sent!</h4>
+              <p>We'll reach out within a few hours to confirm your showing.</p>
+            </div>
+            <form id="form-tour">
+              <div class="cf-row">
+                <div class="cf-group">
+                  <label class="cf-label" for="tFirst">First Name</label>
+                  <input class="cf-input" id="tFirst" type="text" name="first_name" placeholder="Jane" required />
+                </div>
+                <div class="cf-group">
+                  <label class="cf-label" for="tLast">Last Name</label>
+                  <input class="cf-input" id="tLast" type="text" name="last_name" placeholder="Smith" required />
+                </div>
               </div>
               <div class="cf-group">
-                <label class="cf-label" for="cfLast">Last Name</label>
-                <input class="cf-input" id="cfLast" type="text" name="last" placeholder="Smith" required />
+                <label class="cf-label" for="tEmail">Email</label>
+                <input class="cf-input" id="tEmail" type="email" name="email" placeholder="jane@email.com" required />
               </div>
+              <div class="cf-group">
+                <label class="cf-label" for="tPhone">Phone</label>
+                <input class="cf-input" id="tPhone" type="tel" name="phone" placeholder="(201) 555-0000" />
+              </div>
+              <div class="cf-group">
+                <label class="cf-label" for="tDate">Preferred Move-In Date</label>
+                <input class="cf-input" id="tDate" type="date" name="move_in_date" />
+              </div>
+              <div class="cf-group">
+                <label class="cf-label" for="tMsg">Message (optional)</label>
+                <textarea class="cf-input" id="tMsg" name="message" placeholder="Questions about the unit, pets, parking…"></textarea>
+              </div>
+              <button class="cf-submit" type="submit" id="tourBtn" onclick="submitTour(event)">Request a Showing →</button>
+              <p class="cf-status" id="tourStatus"></p>
+            </form>
+          </div>
+
+          <!-- ── TAB 2: Send Me the Info ── -->
+          <div class="form-panel" id="panel-info">
+            <div class="cf-success" id="success-info">
+              <div class="cf-success-icon">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/></svg>
+              </div>
+              <h4>Info Sent to Your Inbox!</h4>
+              <p>Check your email — full listing details and your agent's contact info are on the way.</p>
             </div>
-            <div class="cf-group">
-              <label class="cf-label" for="cfEmail">Email</label>
-              <input class="cf-input" id="cfEmail" type="email" name="email" placeholder="jane@email.com" required />
-            </div>
-            <div class="cf-group">
-              <label class="cf-label" for="cfPhone">Phone</label>
-              <input class="cf-input" id="cfPhone" type="tel" name="phone" placeholder="(201) 555-0000" />
-            </div>
-            <div class="cf-group">
-              <label class="cf-label" for="cfDate">Preferred Move-In</label>
-              <input class="cf-input" id="cfDate" type="date" name="movein" />
-            </div>
-            <div class="cf-group">
-              <label class="cf-label" for="cfMsg">Message</label>
-              <textarea class="cf-input" id="cfMsg" name="message" placeholder="Questions about the unit, pets, lease terms…"></textarea>
-            </div>
-            <button class="cf-submit" type="submit" id="cfBtn">Send Inquiry</button>
-            <p class="cf-status" id="cfStatus"></p>
-          </form>
-        </div>
+            <form id="form-info">
+              <p class="cf-helper">Not ready to schedule yet? Drop your email and we'll send you the full listing details along with your agent's contact information so you can reach out when you're ready.</p>
+              <div class="cf-group">
+                <label class="cf-label" for="iName">Your Name</label>
+                <input class="cf-input" id="iName" type="text" name="name" placeholder="Jane Smith" required />
+              </div>
+              <div class="cf-group">
+                <label class="cf-label" for="iEmail">Email Address</label>
+                <input class="cf-input" id="iEmail" type="email" name="email" placeholder="jane@email.com" required />
+              </div>
+              <button class="cf-submit" type="submit" id="infoBtn" onclick="submitInfo(event)">Send Me the Details →</button>
+              <p class="cf-status" id="infoStatus"></p>
+            </form>
+          </div>
+
+        </div><!-- /form-card -->
       </div>
     </div>
   </div>
@@ -1096,32 +1160,25 @@
   const heroImg = document.querySelector('.hero-img-wrap img');
   const heroPH = document.getElementById('heroPH');
   if (heroImg) {
-    heroImg.addEventListener('load', () => { if(heroPH) heroPH.style.display = 'none'; });
+    heroImg.addEventListener('load', () => { if (heroPH) heroPH.style.display = 'none'; });
     if (heroImg.complete && heroImg.naturalWidth > 0 && heroPH) heroPH.style.display = 'none';
   }
 
   /* ── Lightbox ─────────────────────────────────────────── */
   const photos = [
-    'images/photo1.jpg',
-    'images/photo2.jpg',
-    'images/photo3.jpg',
-    'images/photo4.jpg',
-    'images/photo5.jpg',
+    'images/photo1.jpg','images/photo2.jpg','images/photo3.jpg',
+    'images/photo4.jpg','images/photo5.jpg',
   ];
   let curPhoto = 0;
-
   function openLB(idx) {
     curPhoto = idx;
-    const img = document.getElementById('lbImg');
-    img.src = photos[idx];
+    document.getElementById('lbImg').src = photos[idx];
     document.getElementById('lbCounter').textContent = (idx + 1) + ' / ' + photos.length;
     document.getElementById('lb').classList.add('open');
-    document.documentElement.classList.add('lenis-stopped');
     lenis.stop();
   }
   function closeLB() {
     document.getElementById('lb').classList.remove('open');
-    document.documentElement.classList.remove('lenis-stopped');
     lenis.start();
   }
   function navLB(dir) {
@@ -1141,38 +1198,133 @@
     if (e.key === 'Escape')     closeLB();
   });
 
-  /* ── Quick contact card form ─────────────────────────── */
-  async function handleQuickForm(e) {
-    e.preventDefault();
-    const btn = document.getElementById('ccBtn');
-    const status = document.getElementById('ccStatus');
-    btn.disabled = true; btn.textContent = 'Sending…';
-    await new Promise(r => setTimeout(r, 900)); // replace with real fetch
-    btn.textContent = '✓ Sent — we\'ll be in touch!';
-    btn.style.background = '#2c7a4b';
-    status.textContent = 'Expect a reply within a few hours.';
-    e.target.reset();
-    setTimeout(() => {
-      btn.disabled = false; btn.textContent = 'Request a Showing';
-      btn.style.background = ''; status.textContent = 'We respond within a few hours.';
-    }, 6000);
+  /* ── Tab switcher ────────────────────────────────────── */
+  function switchTab(id, btn) {
+    document.querySelectorAll('.form-tab').forEach(b => b.classList.remove('active'));
+    document.querySelectorAll('.form-panel').forEach(p => p.classList.remove('active'));
+    btn.classList.add('active');
+    document.getElementById('panel-' + id).classList.add('active');
   }
 
-  /* ── Full contact form ───────────────────────────────── */
-  async function handleFullForm(e) {
+  /* ── formsubmit.co AJAX helper ───────────────────────── */
+  const FS_ENDPOINT = 'https://formsubmit.co/ajax/hello@swftstudios.com';
+
+  async function postToFormsubmit(payload) {
+    const fd = new FormData();
+    Object.entries(payload).forEach(([k, v]) => fd.append(k, v));
+    fd.append('_captcha', 'false');
+    const res = await fetch(FS_ENDPOINT, {
+      method: 'POST',
+      headers: { 'Accept': 'application/json' },
+      body: fd,
+    });
+    return res.json();
+  }
+
+  /* ── Sidebar quick form ──────────────────────────────── */
+  document.getElementById('sidebarForm').addEventListener('submit', async e => {
     e.preventDefault();
-    const btn = document.getElementById('cfBtn');
-    const status = document.getElementById('cfStatus');
+    const btn    = document.getElementById('ccBtn');
+    const status = document.getElementById('ccStatus');
+    const form   = e.target;
     btn.disabled = true; btn.textContent = 'Sending…';
-    await new Promise(r => setTimeout(r, 900)); // replace with real fetch/formspree
-    btn.textContent = '✓ Inquiry Sent!';
-    btn.style.background = '#2c7a4b';
-    status.textContent = "We'll reach out within 24 hours to confirm your showing.";
-    e.target.reset();
-    setTimeout(() => {
-      btn.disabled = false; btn.textContent = 'Send Inquiry';
-      btn.style.background = ''; status.textContent = '';
-    }, 6000);
+    try {
+      await postToFormsubmit({
+        _subject: 'Tour Request — 451 Heath Pl, Apt 2',
+        name:  form.name.value,
+        email: form.email.value,
+        phone: form.phone.value,
+        _autoresponse: 'Thanks for your interest in 451 Heath Place, Apt 2! We received your tour request and will reach out within a few hours to confirm.',
+      });
+      btn.textContent = '✓ Request Sent!';
+      btn.style.background = '#16a34a';
+      status.textContent = 'Expect a reply within a few hours.';
+      form.reset();
+    } catch {
+      btn.textContent = 'Try Again';
+      status.textContent = 'Something went wrong — please email hello@swftstudios.com';
+    } finally {
+      btn.disabled = false;
+      setTimeout(() => { btn.textContent = 'Request a Showing'; btn.style.background = ''; status.textContent = 'We respond within a few hours.'; }, 6000);
+    }
+  });
+
+  /* ── Tour form ───────────────────────────────────────── */
+  async function submitTour(e) {
+    e.preventDefault();
+    const form = document.getElementById('form-tour');
+    const btn  = document.getElementById('tourBtn');
+    const stat = document.getElementById('tourStatus');
+    if (!form.checkValidity()) { form.reportValidity(); return; }
+    btn.disabled = true; btn.textContent = 'Sending…';
+    try {
+      await postToFormsubmit({
+        _subject: 'Tour Request — 451 Heath Pl, Apt 2',
+        first_name:    form.first_name.value,
+        last_name:     form.last_name.value,
+        email:         form.email.value,
+        phone:         form.phone.value,
+        move_in_date:  form.move_in_date.value,
+        message:       form.message.value,
+        _autoresponse: 'Hi ' + form.first_name.value + ', thanks for your interest in 451 Heath Place, Apt 2 — Hackensack, NJ! We received your tour request and will reach out within a few hours to confirm your showing.',
+      });
+      form.style.display = 'none';
+      document.getElementById('success-tour').style.display = 'block';
+    } catch {
+      stat.textContent = 'Something went wrong. Please try again.';
+      btn.disabled = false; btn.textContent = 'Request a Showing →';
+    }
+  }
+
+  /* ── Info form ───────────────────────────────────────── */
+  async function submitInfo(e) {
+    e.preventDefault();
+    const form = document.getElementById('form-info');
+    const btn  = document.getElementById('infoBtn');
+    const stat = document.getElementById('infoStatus');
+    if (!form.checkValidity()) { form.reportValidity(); return; }
+    btn.disabled = true; btn.textContent = 'Sending…';
+
+    const autoReply = `Hi ${form.name.value},
+
+Thanks for your interest in 451 Heath Place, Apt 2 — Hackensack, NJ 07601!
+
+LISTING DETAILS
+• Rent: $1,925/month
+• Special Offer: One month FREE if leased by May 15th!
+• Size: 663 sq ft | 1 Bedroom | 1 Full Bath
+• Floor: 2nd floor walk-up (garden style)
+• Included: Heat, hot water & parking
+• Kitchen: Updated countertops, new flooring, brand-new refrigerator
+• Bedroom: King-size bed furnished (additional furniture available)
+• Pets: Considered on a case-by-case basis
+
+YOUR LISTING AGENT
+Roosevelt Hall
+Coldwell Banker Realty
+50 Broadway, Hillsdale, NJ 07642
+Mobile: (201) 280-6333
+Office: (201) 599-1100
+Profile: https://www.realtor.com/realestateagents/5673e76b89a689010069dbc1
+
+To schedule a showing, contact Roosevelt directly or reply to this email.
+
+View the full listing online:
+https://swftstudios.github.io/451-heath-listing/`;
+
+    try {
+      await postToFormsubmit({
+        _subject:      'Listing Info Request — 451 Heath Pl, Apt 2',
+        name:          form.name.value,
+        email:         form.email.value,
+        _autoresponse: autoReply,
+      });
+      form.style.display = 'none';
+      document.getElementById('success-info').style.display = 'block';
+    } catch {
+      stat.textContent = 'Something went wrong. Please try again.';
+      btn.disabled = false; btn.textContent = 'Send Me the Details →';
+    }
   }
 </script>
 </body>
