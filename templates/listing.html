@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>__TITLE__</title>
+  <meta name="description" content="__META_DESCRIPTION__" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=DM+Serif+Display:ital@0;1&display=swap" rel="stylesheet" />
+  <style>
+__INLINE_STYLE__
+  </style>
+</head>
+<body>
+  <nav class="nav">
+    <div class="container nav-inner">
+      <span class="nav-brand">__NAV_BRAND__</span>
+      <a class="btn btn-dark" href="#contact">Schedule a Tour</a>
+    </div>
+  </nav>
+
+  <section class="hero">
+    <div class="container hero-grid">
+      <div>
+        <p class="eyebrow">__AVAILABLE_TEXT__</p>
+        <h1>__ADDRESS_LINE1__<br />__UNIT__</h1>
+        <p class="subhead">__CITY_STATE_ZIP__ - __COUNTY__</p>
+        <p class="price">$__RENT__ <span>/ month</span></p>
+        <p class="offer">__OFFER__</p>
+      </div>
+      <div class="hero-image">
+        <img src="images/__HERO_FILE__" alt="__HERO_ALT__" />
+      </div>
+    </div>
+  </section>
+
+  <section class="stats">
+    <div class="container stats-grid">
+      <article><h3>__BEDROOMS__</h3><p>Bedrooms</p></article>
+      <article><h3>__BATHROOMS__</h3><p>Bathrooms</p></article>
+      <article><h3>__SQFT__</h3><p>Sq Ft</p></article>
+    </div>
+  </section>
+
+  <section>
+    <div class="container">
+      <p class="eyebrow">Photo Tour</p>
+      <div class="photo-grid">__PHOTO_GRID_ITEMS__</div>
+    </div>
+  </section>
+
+  <section class="alt">
+    <div class="container two-col">
+      <div>
+        <p class="eyebrow">About This Home</p>
+        <h2>__ABOUT_TITLE__</h2>
+        <div class="stack">__DESCRIPTION_PARAGRAPHS__</div>
+        <div class="chips">__CHIPS__</div>
+      </div>
+      <aside class="card">
+        <h3>$__RENT__ / month</h3>
+        <p class="offer-sm">__OFFER__</p>
+        <div class="stack-sm">__SIDEBAR_FACTS__</div>
+      </aside>
+    </div>
+  </section>
+
+  <section>
+    <div class="container">
+      <p class="eyebrow">What's Included</p>
+      <h2>Everything You Need, Day One</h2>
+      <div class="feature-grid">__FEATURE_ITEMS__</div>
+    </div>
+  </section>
+
+  <section class="alt">
+    <div class="container">
+      <p class="eyebrow">At a Glance</p>
+      <h2>Property Details</h2>
+      <div class="detail-grid">__DETAIL_ITEMS__</div>
+    </div>
+  </section>
+
+  <section>
+    <div class="container two-col">
+      <div>
+        <p class="eyebrow">Neighborhood</p>
+        <h2>__LOCATION_TITLE__</h2>
+        <iframe class="map" title="map" loading="lazy" allowfullscreen src="https://maps.google.com/maps?q=__MAP_QUERY__&output=embed"></iframe>
+      </div>
+      <div class="location-list">__NEIGHBORHOOD_ITEMS__</div>
+    </div>
+  </section>
+
+  <section id="contact" class="alt">
+    <div class="container two-col">
+      <div>
+        <p class="eyebrow">Get in Touch</p>
+        <h2>Ready to Make a Move?</h2>
+        <p>This listing is data-driven and generated from your intake package.</p>
+      </div>
+      <div class="card">
+        <form id="contactForm">
+          <input type="text" name="name" placeholder="Your name" required />
+          <input type="email" name="email" placeholder="Email address" required />
+          <div class="realtor-options">
+            <p class="field-label">Realtor status</p>
+            <label><input type="checkbox" name="searching_with_realtor" id="searchingWithRealtor" /> I am searching with a realtor</label>
+            <label><input type="checkbox" name="i_am_realtor" id="iAmRealtor" /> I am a realtor</label>
+          </div>
+          <div id="realtorContactFields" class="realtor-contact-fields hidden">
+            <p class="field-label">Realtor contact information</p>
+            <input type="text" name="realtor_name" id="realtorName" placeholder="Realtor name" />
+            <input type="email" name="realtor_email" id="realtorEmail" placeholder="Realtor email" />
+            <input type="tel" name="realtor_phone" id="realtorPhone" placeholder="Realtor phone (optional)" />
+          </div>
+          <button type="submit" class="btn btn-dark">Send Me the Details</button>
+          <p id="formStatus"></p>
+        </form>
+      </div>
+    </div>
+  </section>
+
+  <footer>
+    <div class="container footer-grid">
+      <p>__FOOTER_LINE1__</p>
+      <p>__DISCLAIMER__</p>
+    </div>
+  </footer>
+
+  <script>
+    const LISTING = __LISTING_JSON__;
+    const FS_ENDPOINT = `https://formsubmit.co/ajax/${LISTING.site.lead_email}`;
+
+    function buildAutoReply(name, listing) {
+      return `Hi ${name},
+
+Thanks for your interest in ${listing.property.address_line1}, ${listing.property.unit}!
+
+Download the full property info sheet (PDF):
+${listing.site.pdf_url}
+
+Monthly Rent: $${listing.property.rent}
+Offer: ${listing.property.offer}
+Size: ${listing.property.sqft} sq ft
+Beds/Baths: ${listing.property.bedrooms} / ${listing.property.bathrooms}
+
+View listing:
+${listing.site.site_url}`;
+    }
+
+    async function postToFormsubmit(payload) {
+      const fd = new FormData();
+      Object.entries(payload).forEach(([k, v]) => fd.append(k, v));
+      fd.append("_captcha", "false");
+      const response = await fetch(FS_ENDPOINT, {
+        method: "POST",
+        headers: { Accept: "application/json" },
+        body: fd
+      });
+      return response.json();
+    }
+
+    document.getElementById("contactForm").addEventListener("submit", async (event) => {
+      event.preventDefault();
+      const form = event.target;
+      const status = document.getElementById("formStatus");
+      const button = form.querySelector("button");
+      const searchingWithRealtor = document.getElementById("searchingWithRealtor");
+      const iAmRealtor = document.getElementById("iAmRealtor");
+      const realtorName = document.getElementById("realtorName");
+      const realtorEmail = document.getElementById("realtorEmail");
+      const hasRealtor = searchingWithRealtor.checked || iAmRealtor.checked;
+
+      if (hasRealtor) {
+        realtorName.required = true;
+        realtorEmail.required = true;
+        if (!form.reportValidity()) {
+          return;
+        }
+      }
+
+      button.disabled = true;
+      button.textContent = "Sending...";
+
+      try {
+        await postToFormsubmit({
+          _subject: `Listing Info Request - ${LISTING.property.address_line1}, ${LISTING.property.unit}`,
+          name: form.name.value,
+          email: form.email.value,
+          searching_with_realtor: searchingWithRealtor.checked ? "Yes" : "No",
+          i_am_realtor: iAmRealtor.checked ? "Yes" : "No",
+          realtor_name: form.realtor_name.value || "",
+          realtor_email: form.realtor_email.value || "",
+          realtor_phone: form.realtor_phone.value || "",
+          _autoresponse: buildAutoReply(form.name.value, LISTING)
+        });
+        status.textContent = "Sent. Check your inbox.";
+        form.reset();
+        toggleRealtorContactFields();
+      } catch (err) {
+        status.textContent = "Send failed. Please try again.";
+      } finally {
+        button.disabled = false;
+        button.textContent = "Send Me the Details";
+      }
+    });
+
+    function toggleRealtorContactFields() {
+      const searchingWithRealtor = document.getElementById("searchingWithRealtor");
+      const iAmRealtor = document.getElementById("iAmRealtor");
+      const wrapper = document.getElementById("realtorContactFields");
+      const realtorName = document.getElementById("realtorName");
+      const realtorEmail = document.getElementById("realtorEmail");
+      const show = searchingWithRealtor.checked || iAmRealtor.checked;
+      wrapper.classList.toggle("hidden", !show);
+      realtorName.required = show;
+      realtorEmail.required = show;
+      if (!show) {
+        realtorName.value = "";
+        realtorEmail.value = "";
+        document.getElementById("realtorPhone").value = "";
+      }
+    }
+
+    document.getElementById("searchingWithRealtor").addEventListener("change", toggleRealtorContactFields);
+    document.getElementById("iAmRealtor").addEventListener("change", toggleRealtorContactFields);
+  </script>
+</body>
+</html>
