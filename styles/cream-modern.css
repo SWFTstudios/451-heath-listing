@@ -89,6 +89,24 @@ h2 { font-family: "DM Serif Display", serif; font-size: clamp(1.6rem, 3vw, 2.3re
   border-radius: 10px;
   padding: 14px;
 }
+.feat-icon-wrap {
+  width: 36px;
+  height: 36px;
+  border-radius: 999px;
+  border: 1px solid var(--border);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 10px;
+  background: var(--cream-mid);
+}
+.feat-icon-wrap svg { width: 20px; height: 20px; color: var(--ink-mid); }
+.detail-card strong { display: inline-flex; align-items: center; gap: 8px; }
+.detail-icon { display: inline-flex; color: var(--ink-muted); }
+.detail-icon svg { width: 16px; height: 16px; }
+.location-card h3 { display: inline-flex; align-items: center; gap: 8px; margin: 0 0 8px; }
+.loc-icon { display: inline-flex; color: var(--accent); }
+.loc-icon svg { width: 18px; height: 18px; }
 
 .map { width: 100%; min-height: 320px; border: 1px solid var(--border); border-radius: 10px; }
 form input { width: 100%; margin-bottom: 10px; padding: 10px 12px; border-radius: 8px; border: 1px solid var(--border); font: inherit; }
