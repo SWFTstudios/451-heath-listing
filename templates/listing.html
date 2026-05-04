@@ -23,20 +23,20 @@ __INLINE_STYLE__
   <section class="hero">
     <div class="container hero-grid">
       <div>
-        <p class="eyebrow">__AVAILABLE_TEXT__</p>
-        <h1>__ADDRESS_LINE1__<br />__UNIT__</h1>
-        <p class="subhead">__CITY_STATE_ZIP__ - __COUNTY__</p>
-        <p class="price">$__RENT__ <span>/ month</span></p>
-        <p class="offer">__OFFER__</p>
+        <p class="eyebrow h-anim-1">__AVAILABLE_TEXT__</p>
+        <h1 class="h-anim-2">__ADDRESS_LINE1__<br />__UNIT__</h1>
+        <p class="subhead h-anim-3">__CITY_STATE_ZIP__ - __COUNTY__</p>
+        <p class="price h-anim-4">$__RENT__ <span>/ month</span></p>
+        <p class="offer h-anim-4">__OFFER__</p>
       </div>
-      <div class="hero-image">
+      <div class="hero-image h-anim-img">
         <img src="images/__HERO_FILE__" alt="__HERO_ALT__" />
       </div>
     </div>
   </section>
 
   <section class="stats">
-    <div class="container stats-grid">
+    <div class="container stats-grid reveal">
       <article><h3>__BEDROOMS__</h3><p>Bedrooms</p></article>
       <article><h3>__BATHROOMS__</h3><p>Bathrooms</p></article>
       <article><h3>__SQFT__</h3><p>Sq Ft</p></article>
@@ -46,12 +46,12 @@ __INLINE_STYLE__
   <section>
     <div class="container">
       <p class="eyebrow">Photo Tour</p>
-      <div class="photo-grid">__PHOTO_GRID_ITEMS__</div>
+      <div class="photo-grid reveal reveal-delay-1">__PHOTO_GRID_ITEMS__</div>
     </div>
   </section>
 
   <section class="alt">
-    <div class="container two-col">
+    <div class="container two-col reveal">
       <div>
         <p class="eyebrow">About This Home</p>
         <h2>__ABOUT_TITLE__</h2>
@@ -70,7 +70,7 @@ __INLINE_STYLE__
     <div class="container">
       <p class="eyebrow">What's Included</p>
       <h2>Everything You Need, Day One</h2>
-      <div class="feature-grid">__FEATURE_ITEMS__</div>
+      <div class="feature-grid reveal reveal-delay-1">__FEATURE_ITEMS__</div>
     </div>
   </section>
 
@@ -78,12 +78,12 @@ __INLINE_STYLE__
     <div class="container">
       <p class="eyebrow">At a Glance</p>
       <h2>Property Details</h2>
-      <div class="detail-grid">__DETAIL_ITEMS__</div>
+      <div class="detail-grid reveal reveal-delay-1">__DETAIL_ITEMS__</div>
     </div>
   </section>
 
   <section>
-    <div class="container two-col">
+    <div class="container two-col reveal">
       <div>
         <p class="eyebrow">Neighborhood</p>
         <h2>__LOCATION_TITLE__</h2>
@@ -94,7 +94,7 @@ __INLINE_STYLE__
   </section>
 
   <section id="contact" class="alt">
-    <div class="container two-col">
+    <div class="container two-col reveal">
       <div>
         <p class="eyebrow">Get in Touch</p>
         <h2>Ready to Make a Move?</h2>
@@ -226,6 +226,17 @@ ${listing.site.site_url}`;
 
     document.getElementById("searchingWithRealtor").addEventListener("change", toggleRealtorContactFields);
     document.getElementById("iAmRealtor").addEventListener("change", toggleRealtorContactFields);
+
+    const revealObserver = new IntersectionObserver((entries, observer) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add("visible");
+          observer.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.12 });
+
+    document.querySelectorAll(".reveal").forEach((element) => revealObserver.observe(element));
   </script>
 </body>
 </html>
