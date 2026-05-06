@@ -350,13 +350,19 @@ ${listing.site.site_url}`;
         });
       }
 
+      const blockedDates = new Set(["2026-05-06"]);
+
       for (let i = 0; i < 28; i += 1) {
         const d = new Date(today);
         d.setDate(today.getDate() + i);
+        const iso = isoDateLocal(d);
+        if (blockedDates.has(iso)) {
+          continue;
+        }
         const btn = document.createElement("button");
         btn.type = "button";
         btn.className = "booking-date-btn";
-        btn.dataset.iso = isoDateLocal(d);
+        btn.dataset.iso = iso;
         btn.innerHTML =
           `<span class="booking-day-num">${d.getDate()}</span><span class="booking-day-wd">${dows[d.getDay()]}</span>`;
         btn.addEventListener("click", () => {
