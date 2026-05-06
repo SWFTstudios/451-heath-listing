@@ -48,6 +48,7 @@ python build.py --data listings/from-csv.json --assets images --out .
 2. Provide photos in the assets folder (`hero.jpg`, `photo1.jpg` ... `photo5.jpg`) or set explicit names in CSV/JSON.
 3. Choose a style key (`cream-modern` or `dark-luxury`).
 4. Confirm lead delivery email in `site.lead_email`.
+5. Showing bookings: deploy the Cloudflare Worker in [`workers/`](workers/README.md), then set `site.booking_proxy_url` in your listing JSON to the Worker URL and rebuild.
 
 ## Troubleshooting
 

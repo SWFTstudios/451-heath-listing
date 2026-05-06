@@ -16,27 +16,27 @@ __INLINE_STYLE__
   <nav class="nav">
     <div class="container nav-inner">
       <span class="nav-brand">__NAV_BRAND__</span>
-      <a class="btn btn-dark" href="#contact">Schedule a Tour</a>
+      <a class="btn btn-dark" href="#schedule-showing">Schedule a Tour</a>
     </div>
   </nav>
 
   <section class="hero">
     <div class="container hero-grid">
       <div>
-        <p class="eyebrow">__AVAILABLE_TEXT__</p>
-        <h1>__ADDRESS_LINE1__<br />__UNIT__</h1>
-        <p class="subhead">__CITY_STATE_ZIP__ - __COUNTY__</p>
-        <p class="price">$__RENT__ <span>/ month</span></p>
-        <p class="offer">__OFFER__</p>
+        <p class="eyebrow h-anim-1">__AVAILABLE_TEXT__</p>
+        <h1 class="h-anim-2">__ADDRESS_LINE1__<br />__UNIT__</h1>
+        <p class="subhead h-anim-3">__CITY_STATE_ZIP__ - __COUNTY__</p>
+        <p class="price h-anim-4">$__RENT__ <span>/ month</span></p>
+        <p class="offer h-anim-4">__OFFER__</p>
       </div>
-      <div class="hero-image">
+      <div class="hero-image h-anim-img">
         <img src="images/__HERO_FILE__" alt="__HERO_ALT__" />
       </div>
     </div>
   </section>
 
   <section class="stats">
-    <div class="container stats-grid">
+    <div class="container stats-grid reveal">
       <article><h3>__BEDROOMS__</h3><p>Bedrooms</p></article>
       <article><h3>__BATHROOMS__</h3><p>Bathrooms</p></article>
       <article><h3>__SQFT__</h3><p>Sq Ft</p></article>
@@ -46,12 +46,12 @@ __INLINE_STYLE__
   <section>
     <div class="container">
       <p class="eyebrow">Photo Tour</p>
-      <div class="photo-grid">__PHOTO_GRID_ITEMS__</div>
+      <div class="photo-grid reveal reveal-delay-1">__PHOTO_GRID_ITEMS__</div>
     </div>
   </section>
 
   <section class="alt">
-    <div class="container two-col">
+    <div class="container two-col reveal">
       <div>
         <p class="eyebrow">About This Home</p>
         <h2>__ABOUT_TITLE__</h2>
@@ -70,7 +70,7 @@ __INLINE_STYLE__
     <div class="container">
       <p class="eyebrow">What's Included</p>
       <h2>Everything You Need, Day One</h2>
-      <div class="feature-grid">__FEATURE_ITEMS__</div>
+      <div class="feature-grid reveal reveal-delay-1">__FEATURE_ITEMS__</div>
     </div>
   </section>
 
@@ -78,12 +78,12 @@ __INLINE_STYLE__
     <div class="container">
       <p class="eyebrow">At a Glance</p>
       <h2>Property Details</h2>
-      <div class="detail-grid">__DETAIL_ITEMS__</div>
+      <div class="detail-grid reveal reveal-delay-1">__DETAIL_ITEMS__</div>
     </div>
   </section>
 
   <section>
-    <div class="container two-col">
+    <div class="container two-col reveal">
       <div>
         <p class="eyebrow">Neighborhood</p>
         <h2>__LOCATION_TITLE__</h2>
@@ -93,8 +93,41 @@ __INLINE_STYLE__
     </div>
   </section>
 
+  <section id="schedule-showing">
+    <div class="container">
+      <p class="eyebrow">Book a Showing</p>
+      <h2>Pick a Date &amp; Time</h2>
+      <p class="booking-lede">Tours with lock-box access, 9am–7pm daily — 30-minute slots. Your realtor can meet prospects on site during these windows.</p>
+      <div id="bookingSchedule" class="booking-layout reveal">
+        <div class="booking-calendar-card card">
+          <p class="field-label">1. Choose a date</p>
+          <div id="bookingDateGrid" class="booking-date-grid" role="group" aria-label="Available dates"></div>
+        </div>
+        <div class="booking-slots-card card">
+          <p class="field-label">2. Choose a time (local)</p>
+          <p id="bookingSlotHint" class="booking-hint">Select a date first.</p>
+          <div id="bookingSlotWrap" class="booking-slot-grid" role="group" aria-label="Time slots"></div>
+        </div>
+        <div class="booking-form-card card">
+          <p class="field-label">3. Your details</p>
+          <form id="bookingForm">
+            <input type="text" id="bookingName" name="booking_name" placeholder="Your name" required autocomplete="name" />
+            <input type="email" id="bookingEmail" name="booking_email" placeholder="Email" required autocomplete="email" />
+            <input type="tel" id="bookingPhone" name="booking_phone" placeholder="Phone" required autocomplete="tel" />
+            <input type="text" id="bookingMoveIn" name="move_in_preference" placeholder="Move-in date preference (e.g. June 1 or May 15)" required />
+            <input type="hidden" id="bookingDateIso" name="showing_date_iso" value="" />
+            <input type="hidden" id="bookingTimeLabel" name="showing_time_label" value="" />
+            <button type="submit" class="btn btn-dark" id="bookingSubmitBtn">Request this slot</button>
+            <p id="bookingProxyNote" class="booking-proxy-note hidden"></p>
+            <p id="bookingStatus" class="booking-status" role="status"></p>
+          </form>
+        </div>
+      </div>
+    </div>
+  </section>
+
   <section id="contact" class="alt">
-    <div class="container two-col">
+    <div class="container two-col reveal">
       <div>
         <p class="eyebrow">Get in Touch</p>
         <h2>Ready to Make a Move?</h2>
@@ -226,6 +259,192 @@ ${listing.site.site_url}`;
 
     document.getElementById("searchingWithRealtor").addEventListener("change", toggleRealtorContactFields);
     document.getElementById("iAmRealtor").addEventListener("change", toggleRealtorContactFields);
+
+    const BOOKING_SLOT_MINUTES = (function buildSlots() {
+      const out = [];
+      for (let m = 9 * 60; m <= 18 * 60 + 30; m += 30) {
+        out.push(m);
+      }
+      return out;
+    })();
+
+    function formatSlotLabel(totalMinutes) {
+      const h = Math.floor(totalMinutes / 60);
+      const mm = totalMinutes % 60;
+      const d = new Date(2000, 0, 1, h, mm);
+      return d.toLocaleTimeString(undefined, { hour: "numeric", minute: "2-digit" });
+    }
+
+    function isoDateLocal(d) {
+      const y = d.getFullYear();
+      const mo = String(d.getMonth() + 1).padStart(2, "0");
+      const day = String(d.getDate()).padStart(2, "0");
+      return `${y}-${mo}-${day}`;
+    }
+
+    function initBookingScheduler() {
+      const grid = document.getElementById("bookingDateGrid");
+      const slotWrap = document.getElementById("bookingSlotWrap");
+      const slotHint = document.getElementById("bookingSlotHint");
+      const form = document.getElementById("bookingForm");
+      const statusEl = document.getElementById("bookingStatus");
+      const proxyNote = document.getElementById("bookingProxyNote");
+      const dateIsoInput = document.getElementById("bookingDateIso");
+      const timeLabelInput = document.getElementById("bookingTimeLabel");
+      const submitBtn = document.getElementById("bookingSubmitBtn");
+
+      if (!grid || !form || !slotWrap || !slotHint) {
+        return;
+      }
+
+      const proxyUrl = LISTING.site && LISTING.site.booking_proxy_url
+        ? String(LISTING.site.booking_proxy_url).trim()
+        : "";
+
+      if (!proxyUrl) {
+        if (proxyNote) {
+          proxyNote.classList.remove("hidden");
+          proxyNote.textContent =
+            "Once the booking endpoint is deployed, requests save to Airtable automatically. Until then, use Get in Touch below — showings are generally available 9am–7pm daily (30-minute slots).";
+        }
+        if (submitBtn) {
+          submitBtn.disabled = true;
+        }
+      }
+
+      const today = new Date();
+      today.setHours(0, 0, 0, 0);
+
+      const dows = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
+      dows.forEach((label) => {
+        const el = document.createElement("div");
+        el.className = "booking-dow";
+        el.textContent = label;
+        grid.appendChild(el);
+      });
+
+      let selectedDateBtn = null;
+      let selectedSlotBtn = null;
+      let selectedDate = null;
+
+      function renderSlots() {
+        slotWrap.innerHTML = "";
+        if (!selectedDate) {
+          return;
+        }
+        BOOKING_SLOT_MINUTES.forEach((mins) => {
+          const label = formatSlotLabel(mins);
+          const b = document.createElement("button");
+          b.type = "button";
+          b.className = "booking-slot-btn";
+          b.textContent = label;
+          b.addEventListener("click", () => {
+            if (selectedSlotBtn) {
+              selectedSlotBtn.classList.remove("selected");
+            }
+            b.classList.add("selected");
+            selectedSlotBtn = b;
+            timeLabelInput.value = label;
+          });
+          slotWrap.appendChild(b);
+        });
+      }
+
+      for (let i = 0; i < 28; i += 1) {
+        const d = new Date(today);
+        d.setDate(today.getDate() + i);
+        const btn = document.createElement("button");
+        btn.type = "button";
+        btn.className = "booking-date-btn";
+        btn.dataset.iso = isoDateLocal(d);
+        btn.innerHTML =
+          `<span class="booking-day-num">${d.getDate()}</span><span class="booking-day-wd">${dows[d.getDay()]}</span>`;
+        btn.addEventListener("click", () => {
+          if (selectedDateBtn) {
+            selectedDateBtn.classList.remove("selected");
+          }
+          btn.classList.add("selected");
+          selectedDateBtn = btn;
+          selectedDate = btn.dataset.iso;
+          dateIsoInput.value = selectedDate;
+          if (selectedSlotBtn) {
+            selectedSlotBtn.classList.remove("selected");
+          }
+          selectedSlotBtn = null;
+          timeLabelInput.value = "";
+          renderSlots();
+          slotHint.textContent = `Times for ${selectedDate}`;
+        });
+        grid.appendChild(btn);
+      }
+
+      form.addEventListener("submit", async (event) => {
+        event.preventDefault();
+        statusEl.textContent = "";
+        if (!proxyUrl) {
+          statusEl.textContent = "Booking backend not configured yet.";
+          return;
+        }
+        if (!dateIsoInput.value || !timeLabelInput.value) {
+          statusEl.textContent = "Please choose a date and time.";
+          return;
+        }
+        const payload = {
+          name: document.getElementById("bookingName").value.trim(),
+          email: document.getElementById("bookingEmail").value.trim(),
+          phone: document.getElementById("bookingPhone").value.trim(),
+          showingDate: dateIsoInput.value,
+          showingTime: timeLabelInput.value,
+          moveInPreference: document.getElementById("bookingMoveIn").value.trim()
+        };
+        submitBtn.disabled = true;
+        submitBtn.textContent = "Sending…";
+        try {
+          const response = await fetch(proxyUrl, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(payload)
+          });
+          const responseText = await response.text();
+          if (!response.ok) {
+            throw new Error(responseText || response.statusText);
+          }
+          statusEl.textContent = "Requested. We'll confirm your showing soon.";
+          form.reset();
+          dateIsoInput.value = "";
+          timeLabelInput.value = "";
+          if (selectedSlotBtn) {
+            selectedSlotBtn.classList.remove("selected");
+          }
+          if (selectedDateBtn) {
+            selectedDateBtn.classList.remove("selected");
+          }
+          selectedSlotBtn = null;
+          selectedDateBtn = null;
+          selectedDate = null;
+          slotWrap.innerHTML = "";
+          slotHint.textContent = "Select a date first.";
+        } catch (err) {
+          statusEl.textContent = "Could not save your request. Try again or use Get in Touch.";
+        } finally {
+          submitBtn.disabled = !proxyUrl;
+          submitBtn.textContent = "Request this slot";
+        }
+      });
+    }
+
+    initBookingScheduler();
+
+    const revealObserver = new IntersectionObserver((entries, observer) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add("visible");
+          observer.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.12 });
+
+    document.querySelectorAll(".reveal").forEach((element) => revealObserver.observe(element));
   </script>
 </body>
 </html>
