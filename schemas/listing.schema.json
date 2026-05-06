@@ -149,7 +149,10 @@
         "lead_email": { "type": "string", "minLength": 3 },
         "site_url": { "type": "string", "minLength": 1 },
         "pdf_url": { "type": "string", "minLength": 1 },
-        "disclaimer": { "type": "string", "minLength": 1 }
+        "disclaimer": { "type": "string", "minLength": 1 },
+        "booking_proxy_url": { "type": "string" },
+        "airtable_base_id": { "type": "string", "minLength": 1 },
+        "airtable_table_id": { "type": "string", "minLength": 1 }
       }
     },
     "assets": {

@@ -15,12 +15,12 @@
     "property_type": "Condominium",
     "style": "Garden / 2nd Floor Walk-Up",
     "floor": "2nd floor walk-up",
-    "available": "Available Now",
-    "offer": "One Month Free - Lease by May 15th",
+    "available": "Available June 1st",
+    "offer": "No Realtor Fee - Move In Ready June 1st",
     "description_paragraphs": [
       "Welcome to 451 Heath Place, Apt 2 - a bright, garden-style 1-bedroom condo tucked into a quiet courtyard setting in Hackensack, NJ. Step inside and head up the private staircase to your sun-filled retreat on the second floor.",
       "The open floor plan makes excellent use of 663 square feet - a large, light-filled living and dining area flows naturally through the space. The updated kitchen features new flooring, fresh countertops, and a brand-new refrigerator. The bedroom comfortably fits a king-size bed, and additional furniture is available on request.",
-      "Heat, hot water, and parking are all included in rent. Move in knowing your biggest utility costs are covered - rare for Bergen County."
+      "Heat, hot water, and parking are all included in rent. Move in knowing your biggest utility costs are covered - rare for Bergen County. Need to move in sooner? The unit can be ready as early as May 15th - reach out and we'll work something out."
     ],
     "chips": [
       "Heat Included",
@@ -111,6 +111,9 @@
   },
   "site": {
     "lead_email": "elombe@swftstudios.com",
+    "booking_proxy_url": "",
+    "airtable_base_id": "appx3jGQIAp1lzwW0",
+    "airtable_table_id": "tblERKv4TuOnkYFRS",
     "site_url": "https://swftstudios.github.io/451-heath-listing/",
     "pdf_url": "https://swftstudios.github.io/451-heath-listing/listing-info.pdf",
     "disclaimer": "Presented directly by the owner. All information believed accurate but not warranted. Subject to prior rental."

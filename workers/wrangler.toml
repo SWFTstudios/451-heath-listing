@@ -1,0 +1,12 @@
+name = "451-heath-booking-proxy"
+main = "booking-proxy.js"
+compatibility_date = "2024-01-01"
+
+# Non-secret identifiers (also documented in listings/451-heath.json)
+[vars]
+AIRTABLE_BASE_ID = "appx3jGQIAp1lzwW0"
+AIRTABLE_TABLE_ID = "tblERKv4TuOnkYFRS"
+
+# Required secret (never commit):
+#   cd workers && npx wrangler secret put AIRTABLE_TOKEN
+# Paste your Airtable Personal Access Token with scope: data.records:write for this base.
