@@ -111,7 +111,7 @@
   },
   "site": {
     "lead_email": "elombe@swftstudios.com",
-    "booking_proxy_url": "",
+    "booking_proxy_url": "https://451-heath-booking-proxy.elombe.workers.dev",
     "airtable_base_id": "appx3jGQIAp1lzwW0",
     "airtable_table_id": "tblERKv4TuOnkYFRS",
     "site_url": "https://swftstudios.github.io/451-heath-listing/",
