@@ -1,0 +1,593 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>451 Heath Place — Showing Sign-In</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=DM+Serif+Display:ital@0;1&display=swap" rel="stylesheet" />
+  <style>
+:root {
+  --cream: #eae7e1;
+  --cream-mid: #f2f0ec;
+  --white: #ffffff;
+  --ink: #1c1917;
+  --ink-mid: #44403c;
+  --ink-muted: #78716c;
+  --accent: #d4521e;
+  --border: rgba(28, 25, 23, 0.12);
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  font-family: Inter, system-ui, sans-serif;
+  background: var(--cream);
+  color: var(--ink);
+  line-height: 1.55;
+  min-height: 100vh;
+}
+
+/* ── Screen layout ── */
+.screen-only { display: block; }
+.print-only  { display: none; }
+
+.page-wrap {
+  max-width: 520px;
+  margin: 0 auto;
+  padding: 32px 20px 60px;
+}
+
+/* Property badge at top */
+.prop-header {
+  text-align: center;
+  margin-bottom: 28px;
+}
+.prop-header .eyebrow {
+  text-transform: uppercase;
+  letter-spacing: 0.14em;
+  font-size: 0.7rem;
+  color: var(--accent);
+  font-weight: 700;
+  margin-bottom: 6px;
+}
+.prop-header h1 {
+  font-family: "DM Serif Display", serif;
+  font-size: 1.9rem;
+  line-height: 1.1;
+  margin-bottom: 4px;
+}
+.prop-header .sub {
+  color: var(--ink-muted);
+  font-size: 0.88rem;
+}
+
+/* No-fee banner */
+.no-fee-banner {
+  background: var(--accent);
+  color: #fff;
+  text-align: center;
+  padding: 10px 16px;
+  border-radius: 10px;
+  font-weight: 700;
+  font-size: 1rem;
+  letter-spacing: 0.03em;
+  margin-bottom: 24px;
+}
+
+/* Quick facts strip */
+.facts-strip {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 10px;
+  margin-bottom: 28px;
+}
+.fact {
+  background: var(--white);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  text-align: center;
+  padding: 12px 8px;
+}
+.fact strong {
+  display: block;
+  font-family: "DM Serif Display", serif;
+  font-size: 1.4rem;
+}
+.fact span {
+  font-size: 0.7rem;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--ink-muted);
+}
+
+/* Form card */
+.form-card {
+  background: var(--white);
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  padding: 24px 22px;
+  margin-bottom: 20px;
+}
+.form-card h2 {
+  font-family: "DM Serif Display", serif;
+  font-size: 1.4rem;
+  margin-bottom: 4px;
+}
+.form-card .lede {
+  color: var(--ink-muted);
+  font-size: 0.88rem;
+  margin-bottom: 20px;
+}
+.form-card input {
+  display: block;
+  width: 100%;
+  padding: 11px 13px;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  font: inherit;
+  font-size: 0.95rem;
+  background: var(--cream-mid);
+  margin-bottom: 12px;
+  color: var(--ink);
+  transition: border-color .15s;
+}
+.form-card input:focus {
+  outline: none;
+  border-color: var(--accent);
+  background: var(--white);
+}
+.btn {
+  display: block;
+  width: 100%;
+  border: none;
+  border-radius: 999px;
+  font-weight: 700;
+  font-size: 1rem;
+  padding: 13px 20px;
+  cursor: pointer;
+  font-family: inherit;
+  transition: opacity .15s;
+}
+.btn-dark { background: var(--ink); color: var(--white); }
+.btn:disabled { opacity: 0.55; cursor: not-allowed; }
+.form-status {
+  text-align: center;
+  margin-top: 12px;
+  font-size: 0.88rem;
+  color: var(--ink-mid);
+  min-height: 20px;
+}
+
+/* Success state */
+.success-card {
+  display: none;
+  background: var(--white);
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  padding: 28px 22px;
+  text-align: center;
+  margin-bottom: 20px;
+}
+.success-card .check-icon {
+  width: 52px;
+  height: 52px;
+  background: rgba(212, 82, 30, 0.1);
+  border-radius: 999px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto 16px;
+}
+.success-card .check-icon svg { color: var(--accent); }
+.success-card h2 {
+  font-family: "DM Serif Display", serif;
+  font-size: 1.4rem;
+  margin-bottom: 8px;
+}
+.success-card p { color: var(--ink-muted); font-size: 0.9rem; margin-bottom: 6px; }
+
+/* Realtor card */
+.realtor-card {
+  background: var(--cream-mid);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 16px 18px;
+}
+.realtor-card .eyebrow {
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  font-size: 0.67rem;
+  color: var(--accent);
+  font-weight: 700;
+  margin-bottom: 8px;
+}
+.realtor-card h3 { font-size: 1rem; font-weight: 600; margin-bottom: 2px; }
+.realtor-card p  { font-size: 0.85rem; color: var(--ink-mid); margin-bottom: 3px; }
+.realtor-card a  { color: var(--ink); font-weight: 600; text-decoration: none; }
+.realtor-note {
+  margin-top: 10px;
+  font-size: 0.82rem;
+  color: var(--ink-muted);
+  padding-top: 10px;
+  border-top: 1px solid var(--border);
+}
+
+/* Footer */
+.footer-note {
+  text-align: center;
+  font-size: 0.75rem;
+  color: var(--ink-muted);
+  margin-top: 24px;
+}
+.footer-note a { color: var(--ink-muted); }
+
+/* ─────────────────────────────────────────
+   PRINT STYLES
+───────────────────────────────────────── */
+@media print {
+  * { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+
+  body {
+    background: #fff;
+    font-size: 10pt;
+  }
+
+  .screen-only { display: none !important; }
+  .print-only  { display: block !important; }
+
+  .print-page {
+    width: 100%;
+    max-width: 7.5in;
+    margin: 0 auto;
+    padding: 0.3in 0.4in;
+    font-family: Inter, system-ui, sans-serif;
+    color: #1c1917;
+  }
+
+  /* Print header */
+  .print-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 14pt;
+    border-bottom: 2pt solid #1c1917;
+    padding-bottom: 10pt;
+  }
+  .print-header-left h1 {
+    font-family: "DM Serif Display", serif;
+    font-size: 22pt;
+    line-height: 1.1;
+    margin-bottom: 3pt;
+  }
+  .print-header-left .print-sub {
+    font-size: 9pt;
+    color: #44403c;
+    margin-bottom: 6pt;
+  }
+  .print-header-left .print-facts {
+    display: flex;
+    gap: 16pt;
+    font-size: 8.5pt;
+    color: #44403c;
+  }
+  .print-header-left .print-facts span strong {
+    display: block;
+    font-size: 11pt;
+    color: #1c1917;
+    font-weight: 700;
+  }
+
+  /* No-fee badge in print */
+  .print-no-fee {
+    background: #d4521e !important;
+    color: #fff !important;
+    font-size: 10pt;
+    font-weight: 700;
+    padding: 5pt 10pt;
+    border-radius: 5pt;
+    letter-spacing: 0.03em;
+    margin-top: 6pt;
+    display: inline-block;
+  }
+
+  /* QR block */
+  .print-qr-wrap {
+    text-align: center;
+  }
+  .print-qr-wrap img {
+    width: 90pt;
+    height: 90pt;
+    display: block;
+    margin: 0 auto 4pt;
+    border: 1pt solid #e0ddd8;
+    border-radius: 4pt;
+    padding: 3pt;
+  }
+  .print-qr-wrap p {
+    font-size: 7pt;
+    color: #78716c;
+    line-height: 1.3;
+    max-width: 90pt;
+  }
+
+  /* Sheet title */
+  .print-sheet-title {
+    font-size: 10pt;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    color: #44403c;
+    margin-bottom: 8pt;
+  }
+
+  /* Sign-in table */
+  .print-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: 14pt;
+  }
+  .print-table th {
+    font-size: 7.5pt;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: #78716c;
+    border-bottom: 1.5pt solid #1c1917;
+    padding: 4pt 6pt;
+    text-align: left;
+  }
+  .print-table td {
+    border-bottom: 0.75pt solid #d0cdc8;
+    height: 26pt;
+    padding: 0 6pt;
+  }
+  .print-table tr:nth-child(even) td {
+    background: #f5f3ef;
+  }
+  .print-table .num-col {
+    width: 24pt;
+    font-size: 7.5pt;
+    color: #78716c;
+    text-align: center;
+  }
+  .print-table .name-col  { width: 34%; }
+  .print-table .email-col { width: 36%; }
+  .print-table .phone-col { width: 24%; }
+
+  /* Realtor footer */
+  .print-footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    border-top: 1pt solid #d0cdc8;
+    padding-top: 8pt;
+    font-size: 8pt;
+    color: #44403c;
+  }
+  .print-footer strong { font-size: 9pt; color: #1c1917; }
+  .print-footer .print-footer-right {
+    text-align: right;
+    font-size: 7.5pt;
+    color: #78716c;
+  }
+}
+  </style>
+</head>
+<body>
+
+<!-- ════════════════════════════════════
+     SCREEN VIEW (digital sign-in)
+════════════════════════════════════ -->
+<div class="screen-only">
+  <div class="page-wrap">
+
+    <div class="prop-header">
+      <p class="eyebrow">Showing Today · Hackensack, NJ</p>
+      <h1>451 Heath Place<br/>Apt 2</h1>
+      <p class="sub">Hackensack, NJ 07601 · Bergen County</p>
+    </div>
+
+    <div class="no-fee-banner">★ NO REALTOR FEE — Save Thousands</div>
+
+    <div class="facts-strip">
+      <div class="fact"><strong>$1,925</strong><span>/ month</span></div>
+      <div class="fact"><strong>663</strong><span>sq ft</span></div>
+      <div class="fact"><strong>1 BD</strong><span>1 BA</span></div>
+    </div>
+
+    <!-- Form (hidden on success) -->
+    <div class="form-card" id="formCard">
+      <h2>Sign In for a Follow-Up</h2>
+      <p class="lede">Leave your name and email — we'll send you the full listing details and next steps.</p>
+      <form id="signinForm">
+        <input type="text"  id="siName"  name="name"  placeholder="Your name"  required autocomplete="name" />
+        <input type="email" id="siEmail" name="email" placeholder="Email address" required autocomplete="email" />
+        <input type="tel"   id="siPhone" name="phone" placeholder="Phone (optional)" autocomplete="tel" />
+        <button type="submit" class="btn btn-dark" id="siSubmit">Send Me the Info</button>
+        <p class="form-status" id="siStatus"></p>
+      </form>
+    </div>
+
+    <!-- Success card (shown after submit) -->
+    <div class="success-card" id="successCard">
+      <div class="check-icon">
+        <svg xmlns="http://www.w3.org/2000/svg" width="26" height="26" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg>
+      </div>
+      <h2>You're all set!</h2>
+      <p>Check your inbox — we've sent the full listing details to your email.</p>
+      <p style="margin-top:6px;">To move forward with a rental application, contact our realtor directly:</p>
+    </div>
+
+    <div class="realtor-card">
+      <p class="eyebrow">Your Next Step</p>
+      <h3>Roosevelt Hall, REALTOR®</h3>
+      <p>Coldwell Banker Realty</p>
+      <p><a href="tel:+12012806333">(201) 280-6333</a> mobile</p>
+      <p><a href="tel:+12015991100">(201) 599-1100</a> office</p>
+      <p class="realtor-note">
+        <strong>No realtor fee</strong> — tenant pays no commission. Contact Roosevelt for application info, lease terms, and to schedule a second visit.
+      </p>
+    </div>
+
+    <p class="footer-note">
+      <a href="https://451-heath-listing.pages.dev/" target="_blank">View full listing →</a>
+      &nbsp;·&nbsp; All info believed accurate, subject to prior rental.
+    </p>
+
+  </div>
+</div><!-- /screen-only -->
+
+
+<!-- ════════════════════════════════════
+     PRINT VIEW (sign-in sheet)
+════════════════════════════════════ -->
+<div class="print-only">
+  <div class="print-page">
+
+    <!-- Header row: property info + QR code -->
+    <div class="print-header">
+      <div class="print-header-left">
+        <h1>451 Heath Place, Apt 2</h1>
+        <p class="print-sub">Hackensack, NJ 07601 · Bergen County · $1,925/month · Available May 15th</p>
+        <div class="print-facts">
+          <span><strong>1</strong>Bedroom</span>
+          <span><strong>1</strong>Bathroom</span>
+          <span><strong>663 sq ft</strong>Interior</span>
+          <span><strong>Heat + Hot Water + Parking</strong>Included in Rent</span>
+        </div>
+        <span class="print-no-fee">★ NO REALTOR FEE — Tenant Pays No Commission</span>
+      </div>
+      <div class="print-qr-wrap">
+        <img src="https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=https%3A%2F%2F451-heath-listing.pages.dev%2Fcheckin.html&bgcolor=ffffff&color=1c1917&margin=4" alt="QR code to sign in" />
+        <p>Scan to sign in<br/>digitally &amp; get the<br/>listing by email</p>
+      </div>
+    </div>
+
+    <!-- Sheet title -->
+    <p class="print-sheet-title">Showing Sign-In Sheet — Please print your name and email clearly</p>
+
+    <!-- Sign-in lines -->
+    <table class="print-table">
+      <thead>
+        <tr>
+          <th class="num-col">#</th>
+          <th class="name-col">Full Name</th>
+          <th class="email-col">Email Address</th>
+          <th class="phone-col">Phone (optional)</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr><td class="num-col">1</td><td class="name-col"></td><td class="email-col"></td><td class="phone-col"></td></tr>
+        <tr><td class="num-col">2</td><td class="name-col"></td><td class="email-col"></td><td class="phone-col"></td></tr>
+        <tr><td class="num-col">3</td><td class="name-col"></td><td class="email-col"></td><td class="phone-col"></td></tr>
+        <tr><td class="num-col">4</td><td class="name-col"></td><td class="email-col"></td><td class="phone-col"></td></tr>
+        <tr><td class="num-col">5</td><td class="name-col"></td><td class="email-col"></td><td class="phone-col"></td></tr>
+        <tr><td class="num-col">6</td><td class="name-col"></td><td class="email-col"></td><td class="phone-col"></td></tr>
+        <tr><td class="num-col">7</td><td class="name-col"></td><td class="email-col"></td><td class="phone-col"></td></tr>
+        <tr><td class="num-col">8</td><td class="name-col"></td><td class="email-col"></td><td class="phone-col"></td></tr>
+        <tr><td class="num-col">9</td><td class="name-col"></td><td class="email-col"></td><td class="phone-col"></td></tr>
+        <tr><td class="num-col">10</td><td class="name-col"></td><td class="email-col"></td><td class="phone-col"></td></tr>
+        <tr><td class="num-col">11</td><td class="name-col"></td><td class="email-col"></td><td class="phone-col"></td></tr>
+        <tr><td class="num-col">12</td><td class="name-col"></td><td class="email-col"></td><td class="phone-col"></td></tr>
+        <tr><td class="num-col">13</td><td class="name-col"></td><td class="email-col"></td><td class="phone-col"></td></tr>
+        <tr><td class="num-col">14</td><td class="name-col"></td><td class="email-col"></td><td class="phone-col"></td></tr>
+        <tr><td class="num-col">15</td><td class="name-col"></td><td class="email-col"></td><td class="phone-col"></td></tr>
+      </tbody>
+    </table>
+
+    <!-- Realtor footer -->
+    <div class="print-footer">
+      <div>
+        <strong>Interested? Contact our realtor to apply:</strong><br/>
+        Roosevelt Hall, REALTOR® · Coldwell Banker Realty<br/>
+        Mobile: (201) 280-6333 · Office: (201) 599-1100
+      </div>
+      <div class="print-footer-right">
+        View full listing online:<br/>
+        451-heath-listing.pages.dev<br/>
+        All info believed accurate, subject to prior rental.
+      </div>
+    </div>
+
+  </div>
+</div><!-- /print-only -->
+
+
+<script>
+  const FS_ENDPOINT = "https://formsubmit.co/ajax/elombe@swftstudios.com";
+
+  const AUTO_REPLY = (name) => `Hi ${name},
+
+Thanks for visiting 451 Heath Place, Apt 2 today — great to meet you!
+
+Here's a quick summary of the unit:
+
+  Address:    451 Heath Place, Apt 2, Hackensack, NJ 07601
+  Rent:       $1,925/month
+  Size:       1 Bed / 1 Bath · 663 sq ft
+  Included:   Heat, Hot Water & Parking
+  Available:  May 15th
+
+★ NO REALTOR FEE — you pay zero commission. This is a direct rental from the owner.
+
+──────────────────────────────
+To move forward with an application or for lease info, contact our realtor directly:
+
+  Roosevelt Hall, REALTOR®
+  Coldwell Banker Realty
+  Mobile: (201) 280-6333
+  Office: (201) 599-1100
+──────────────────────────────
+
+View the full listing:
+https://451-heath-listing.pages.dev/
+
+Download the property info sheet (PDF):
+https://swftstudios.github.io/451-heath-listing/listing-info.pdf
+
+Looking forward to hearing from you!`;
+
+  document.getElementById("signinForm").addEventListener("submit", async (e) => {
+    e.preventDefault();
+    const btn    = document.getElementById("siSubmit");
+    const status = document.getElementById("siStatus");
+    const name   = document.getElementById("siName").value.trim();
+    const email  = document.getElementById("siEmail").value.trim();
+    const phone  = document.getElementById("siPhone").value.trim();
+
+    btn.disabled = true;
+    btn.textContent = "Sending…";
+    status.textContent = "";
+
+    try {
+      const fd = new FormData();
+      fd.append("name",  name);
+      fd.append("email", email);
+      if (phone) fd.append("phone", phone);
+      fd.append("_subject",      "Showing Sign-In — 451 Heath Place, Apt 2");
+      fd.append("_captcha",      "false");
+      fd.append("_autoresponse", AUTO_REPLY(name));
+
+      const res = await fetch(FS_ENDPOINT, {
+        method: "POST",
+        headers: { Accept: "application/json" },
+        body: fd
+      });
+
+      if (!res.ok) throw new Error("server error");
+
+      // Show success state
+      document.getElementById("formCard").style.display    = "none";
+      document.getElementById("successCard").style.display = "block";
+
+    } catch (err) {
+      status.textContent = "Something went wrong — please try again.";
+      btn.disabled = false;
+      btn.textContent = "Send Me the Info";
+    }
+  });
+</script>
+</body>
+</html>
