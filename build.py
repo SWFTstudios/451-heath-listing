@@ -110,7 +110,8 @@ def _build_html(listing: dict[str, Any], style_text: str) -> str:
         f"<p><strong>Bedrooms:</strong> {prop['bedrooms']} Bed</p>",
         f"<p><strong>Bathrooms:</strong> {prop['bathrooms']} Bath</p>",
         f"<p><strong>Size:</strong> {prop['sqft']} sq ft</p>",
-        "<p><strong>Utilities:</strong> Heat + Hot Water + Parking</p>",
+        "<p><strong>Move-In:</strong> June 1st or sooner</p>",
+        "<p><strong>Utilities:</strong> Heat + Hot Water</p>",
     ]
 
     mapping = {
@@ -142,6 +143,7 @@ def _build_html(listing: dict[str, Any], style_text: str) -> str:
         "NEIGHBORHOOD_ITEMS": _render_neighborhood_items(prop["neighborhood"]),
         "FOOTER_LINE1": f"{prop['address_line1']}, {prop['unit']} · {prop['city']}, {prop['state']} {prop['zip']} · ${_fmt_money(prop['rent'])}/month",
         "DISCLAIMER": site["disclaimer"],
+        "NEXT_STEPS_URL": site.get("next_steps_url", "").strip(),
         "LISTING_JSON": json.dumps(listing, ensure_ascii=True),
     }
     return _render_template(template, mapping)
