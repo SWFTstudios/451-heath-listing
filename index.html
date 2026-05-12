@@ -247,18 +247,18 @@ footer { background: var(--ink); color: rgba(255, 255, 255, 0.72); padding: 28px
   <nav class="nav">
     <div class="container nav-inner">
       <span class="nav-brand">451 Heath Place · Hackensack</span>
-      <button class="btn btn-dark" data-cal-link="swftstudios/451-heath" data-cal-namespace="451-heath" data-cal-config='{"layout":"month_view"}'>Schedule a Tour</button>
+      <a class="btn btn-dark" href="#schedule-showing">Schedule a Tour</a>
     </div>
   </nav>
 
   <section class="hero">
     <div class="container hero-grid">
       <div>
-        <p class="eyebrow h-anim-1">Available May 15th — Hackensack, NJ</p>
+        <p class="eyebrow h-anim-1">Available June 1st — Hackensack, NJ</p>
         <h1 class="h-anim-2">451 Heath Place<br />Apt 2</h1>
         <p class="subhead h-anim-3">Hackensack, NJ 07601 - Bergen County</p>
         <p class="price h-anim-4">$1,925 <span>/ month</span></p>
-        <p class="offer h-anim-4">No Realtor Fee - Move In Ready May 15th</p>
+        <p class="offer h-anim-4">No Realtor Fee - Move In Ready June 1st</p>
       </div>
       <div class="hero-image h-anim-img">
         <img src="images/hero.jpg" alt="451 Heath Place interior" />
@@ -291,7 +291,7 @@ footer { background: var(--ink); color: rgba(255, 255, 255, 0.72); padding: 28px
       </div>
       <aside class="card">
         <h3>$1,925 / month</h3>
-        <p class="offer-sm">No Realtor Fee - Move In Ready May 15th</p>
+        <p class="offer-sm">No Realtor Fee - Move In Ready June 1st</p>
         <div class="stack-sm"><p><strong>Bedrooms:</strong> 1 Bed</p><p><strong>Bathrooms:</strong> 1 Bath</p><p><strong>Size:</strong> 663 sq ft</p><p><strong>Utilities:</strong> Heat + Hot Water + Parking</p></div>
       </aside>
     </div>
@@ -327,8 +327,33 @@ footer { background: var(--ink); color: rgba(255, 255, 255, 0.72); padding: 28px
   <section id="schedule-showing">
     <div class="container">
       <p class="eyebrow">Book a Showing</p>
-      <h2>Schedule Your Tour</h2>
-      <p class="booking-lede">Use the <strong>Schedule a Tour</strong> button — in the nav or the floating button below — to pick a date and time that works for you. Confirmed instantly.</p>
+      <h2>Pick a Date &amp; Time</h2>
+      <p class="booking-lede">Tours with lock-box access, 9am–7pm daily — 30-minute slots. Your realtor can meet prospects on site during these windows.</p>
+      <div id="bookingSchedule" class="booking-layout reveal">
+        <div class="booking-calendar-card card">
+          <p class="field-label">1. Choose a date</p>
+          <div id="bookingDateGrid" class="booking-date-grid" role="group" aria-label="Available dates"></div>
+        </div>
+        <div class="booking-slots-card card">
+          <p class="field-label">2. Choose a time (local)</p>
+          <p id="bookingSlotHint" class="booking-hint">Select a date first.</p>
+          <div id="bookingSlotWrap" class="booking-slot-grid" role="group" aria-label="Time slots"></div>
+        </div>
+        <div class="booking-form-card card">
+          <p class="field-label">3. Your details</p>
+          <form id="bookingForm">
+            <input type="text" id="bookingName" name="booking_name" placeholder="Your name" required autocomplete="name" />
+            <input type="email" id="bookingEmail" name="booking_email" placeholder="Email" required autocomplete="email" />
+            <input type="tel" id="bookingPhone" name="booking_phone" placeholder="Phone" required autocomplete="tel" />
+            <input type="text" id="bookingMoveIn" name="move_in_preference" placeholder="Move-in date preference (e.g. June 1 or May 15)" required />
+            <input type="hidden" id="bookingDateIso" name="showing_date_iso" value="" />
+            <input type="hidden" id="bookingTimeLabel" name="showing_time_label" value="" />
+            <button type="submit" class="btn btn-dark" id="bookingSubmitBtn">Request this slot</button>
+            <p id="bookingProxyNote" class="booking-proxy-note hidden"></p>
+            <p id="bookingStatus" class="booking-status" role="status"></p>
+          </form>
+        </div>
+      </div>
     </div>
   </section>
 
@@ -369,7 +394,7 @@ footer { background: var(--ink); color: rgba(255, 255, 255, 0.72); padding: 28px
   </footer>
 
   <script>
-    const LISTING = {"id": "451-heath", "property": {"address_line1": "451 Heath Place", "unit": "Apt 2", "city": "Hackensack", "state": "NJ", "zip": "07601", "county": "Bergen County", "rent": 1925, "bedrooms": 1, "bathrooms": 1, "sqft": 663, "year_built": 1950, "property_type": "Condominium", "style": "Garden / 2nd Floor Walk-Up", "floor": "2nd floor walk-up", "available": "Available May 15th", "offer": "No Realtor Fee - Move In Ready May 15th", "description_paragraphs": ["Welcome to 451 Heath Place, Apt 2 - a bright, garden-style 1-bedroom condo tucked into a quiet courtyard setting in Hackensack, NJ. Step inside and head up the private staircase to your sun-filled retreat on the second floor.", "The open floor plan makes excellent use of 663 square feet - a large, light-filled living and dining area flows naturally through the space. The updated kitchen features new flooring, fresh countertops, and a brand-new refrigerator. The bedroom comfortably fits a king-size bed, and additional furniture is available on request.", "Heat, hot water, and parking are all included in rent. Move in knowing your biggest utility costs are covered - rare for Bergen County. Need to move in sooner? The unit can be ready as early as May 15th - reach out and we'll work something out."], "chips": ["Heat Included", "Hot Water Included", "Parking Included", "Courtyard Setting", "Garden Style", "Open Floor Plan", "2nd Floor Walk-Up", "Pets Considered", "Built 1950"], "features": [{"name": "Heat Included", "description": "Natural gas radiator heat - no winter utility surprises."}, {"name": "Hot Water Included", "description": "Hot water covered - one less bill to think about."}, {"name": "Parking Included", "description": "Your own dedicated spot - no permit stress."}, {"name": "Private Walk-Up", "description": "Your own staircase entrance - garden-style privacy."}, {"name": "Updated Kitchen", "description": "New floors, new countertops, brand-new refrigerator."}, {"name": "Furnished Option", "description": "King bed in bedroom plus living room furniture available."}, {"name": "Pets Considered", "description": "Pets welcome on a case-by-case basis - ask us."}, {"name": "Courtyard Setting", "description": "Quiet, private community with serene outdoor space."}], "details": [{"key": "Monthly Rent", "value": "$1,925"}, {"key": "Square Footage", "value": "663 sq ft"}, {"key": "Year Built", "value": "1950"}, {"key": "Property Type", "value": "Condominium"}, {"key": "Utilities Included", "value": "Heat + Hot Water"}, {"key": "Style", "value": "Garden / Walk-Up"}], "neighborhood": [{"name": "NYC Access", "description": "Bus and train connections to Midtown Manhattan."}, {"name": "Hackensack Univ. Medical Center", "description": "Top-ranked hospital minutes away."}, {"name": "Shopping and Dining", "description": "Restaurants, grocery, and retail nearby."}, {"name": "Public Schools", "description": "Hackensack public schools in close proximity."}, {"name": "Quiet Residential Street", "description": "Courtyard building in a calm neighborhood."}], "map_query": "451+Heath+Place+Hackensack+NJ+07601", "hero_alt": "451 Heath Place interior"}, "agent": {"name": "Roosevelt Hall", "title": "REALTOR", "brokerage": "Coldwell Banker Realty", "office_address": "50 Broadway, Hillsdale, NJ 07642", "mobile": "(201) 280-6333", "office": "(201) 599-1100", "profile_url": "https://www.realtor.com/realestateagents/5673e76b89a689010069dbc1"}, "site": {"lead_email": "elombe@swftstudios.com", "booking_proxy_url": "https://451-heath-booking-proxy.elombe.workers.dev", "airtable_base_id": "appx3jGQIAp1lzwW0", "airtable_table_id": "tblERKv4TuOnkYFRS", "site_url": "https://swftstudios.github.io/451-heath-listing/", "pdf_url": "https://swftstudios.github.io/451-heath-listing/listing-info.pdf", "disclaimer": "Presented directly by the owner. All information believed accurate but not warranted. Subject to prior rental."}, "assets": {"hero": "hero.jpg", "photos": [{"file": "photo1.jpg", "label": "LIVING ROOM", "alt": "Spacious living room with large sectional and natural light"}, {"file": "photo2.jpg", "label": "KITCHEN", "alt": "Updated kitchen with granite counters, gas range, and stainless fridge"}, {"file": "photo3.jpg", "label": "BEDROOM", "alt": "King-size bedroom with ceiling fan and ample natural light"}, {"file": "photo4.jpg", "label": "BATHROOM", "alt": "Full bathroom with tub/shower, vanity, and classic black-and-white tile"}, {"file": "photo5.jpg", "label": "EXTERIOR", "alt": "Classic brick building exterior with lush courtyard lawn"}]}, "theme": {"style": "cream-modern", "palette": {"ink": "#1c1917", "accent": "#d4521e", "cream": "#eae7e1", "cream_mid": "#f2f0ec", "white": "#ffffff", "muted": "#78716c", "light_ink": "#b4b0aa", "faint": "#8c8882"}}};
+    const LISTING = {"id": "451-heath", "property": {"address_line1": "451 Heath Place", "unit": "Apt 2", "city": "Hackensack", "state": "NJ", "zip": "07601", "county": "Bergen County", "rent": 1925, "bedrooms": 1, "bathrooms": 1, "sqft": 663, "year_built": 1950, "property_type": "Condominium", "style": "Garden / 2nd Floor Walk-Up", "floor": "2nd floor walk-up", "available": "Available June 1st", "offer": "No Realtor Fee - Move In Ready June 1st", "description_paragraphs": ["Welcome to 451 Heath Place, Apt 2 - a bright, garden-style 1-bedroom condo tucked into a quiet courtyard setting in Hackensack, NJ. Step inside and head up the private staircase to your sun-filled retreat on the second floor.", "The open floor plan makes excellent use of 663 square feet - a large, light-filled living and dining area flows naturally through the space. The updated kitchen features new flooring, fresh countertops, and a brand-new refrigerator. The bedroom comfortably fits a king-size bed, and additional furniture is available on request.", "Heat, hot water, and parking are all included in rent. Move in knowing your biggest utility costs are covered - rare for Bergen County. Need to move in sooner? The unit can be ready as early as May 15th - reach out and we'll work something out."], "chips": ["Heat Included", "Hot Water Included", "Parking Included", "Courtyard Setting", "Garden Style", "Open Floor Plan", "2nd Floor Walk-Up", "Pets Considered", "Built 1950"], "features": [{"name": "Heat Included", "description": "Natural gas radiator heat - no winter utility surprises."}, {"name": "Hot Water Included", "description": "Hot water covered - one less bill to think about."}, {"name": "Parking Included", "description": "Your own dedicated spot - no permit stress."}, {"name": "Private Walk-Up", "description": "Your own staircase entrance - garden-style privacy."}, {"name": "Updated Kitchen", "description": "New floors, new countertops, brand-new refrigerator."}, {"name": "Furnished Option", "description": "King bed in bedroom plus living room furniture available."}, {"name": "Pets Considered", "description": "Pets welcome on a case-by-case basis - ask us."}, {"name": "Courtyard Setting", "description": "Quiet, private community with serene outdoor space."}], "details": [{"key": "Monthly Rent", "value": "$1,925"}, {"key": "Square Footage", "value": "663 sq ft"}, {"key": "Year Built", "value": "1950"}, {"key": "Property Type", "value": "Condominium"}, {"key": "Utilities Included", "value": "Heat + Hot Water"}, {"key": "Style", "value": "Garden / Walk-Up"}], "neighborhood": [{"name": "NYC Access", "description": "Bus and train connections to Midtown Manhattan."}, {"name": "Hackensack Univ. Medical Center", "description": "Top-ranked hospital minutes away."}, {"name": "Shopping and Dining", "description": "Restaurants, grocery, and retail nearby."}, {"name": "Public Schools", "description": "Hackensack public schools in close proximity."}, {"name": "Quiet Residential Street", "description": "Courtyard building in a calm neighborhood."}], "map_query": "451+Heath+Place+Hackensack+NJ+07601", "hero_alt": "451 Heath Place interior"}, "agent": {"name": "Roosevelt Hall", "title": "REALTOR", "brokerage": "Coldwell Banker Realty", "office_address": "50 Broadway, Hillsdale, NJ 07642", "mobile": "(201) 280-6333", "office": "(201) 599-1100", "profile_url": "https://www.realtor.com/realestateagents/5673e76b89a689010069dbc1"}, "site": {"lead_email": "elombe@swftstudios.com", "booking_proxy_url": "https://451-heath-booking-proxy.elombe.workers.dev", "airtable_base_id": "appx3jGQIAp1lzwW0", "airtable_table_id": "tblERKv4TuOnkYFRS", "site_url": "https://swftstudios.github.io/451-heath-listing/", "pdf_url": "https://swftstudios.github.io/451-heath-listing/listing-info.pdf", "disclaimer": "Presented directly by the owner. All information believed accurate but not warranted. Subject to prior rental."}, "assets": {"hero": "hero.jpg", "photos": [{"file": "photo1.jpg", "label": "LIVING ROOM", "alt": "Spacious living room with large sectional and natural light"}, {"file": "photo2.jpg", "label": "KITCHEN", "alt": "Updated kitchen with granite counters, gas range, and stainless fridge"}, {"file": "photo3.jpg", "label": "BEDROOM", "alt": "King-size bedroom with ceiling fan and ample natural light"}, {"file": "photo4.jpg", "label": "BATHROOM", "alt": "Full bathroom with tub/shower, vanity, and classic black-and-white tile"}, {"file": "photo5.jpg", "label": "EXTERIOR", "alt": "Classic brick building exterior with lush courtyard lawn"}]}, "theme": {"style": "cream-modern", "palette": {"ink": "#1c1917", "accent": "#d4521e", "cream": "#eae7e1", "cream_mid": "#f2f0ec", "white": "#ffffff", "muted": "#78716c", "light_ink": "#b4b0aa", "faint": "#8c8882"}}};
     const FS_ENDPOINT = `https://formsubmit.co/ajax/${LISTING.site.lead_email}`;
 
     function buildAutoReply(name, listing) {
@@ -466,6 +491,202 @@ ${listing.site.site_url}`;
     document.getElementById("searchingWithRealtor").addEventListener("change", toggleRealtorContactFields);
     document.getElementById("iAmRealtor").addEventListener("change", toggleRealtorContactFields);
 
+    const BOOKING_SLOT_MINUTES = (function buildSlots() {
+      const out = [];
+      for (let m = 9 * 60; m <= 18 * 60 + 30; m += 30) {
+        out.push(m);
+      }
+      return out;
+    })();
+
+    function formatSlotLabel(totalMinutes) {
+      const h = Math.floor(totalMinutes / 60);
+      const mm = totalMinutes % 60;
+      const d = new Date(2000, 0, 1, h, mm);
+      return d.toLocaleTimeString(undefined, { hour: "numeric", minute: "2-digit" });
+    }
+
+    function isoDateLocal(d) {
+      const y = d.getFullYear();
+      const mo = String(d.getMonth() + 1).padStart(2, "0");
+      const day = String(d.getDate()).padStart(2, "0");
+      return `${y}-${mo}-${day}`;
+    }
+
+    function initBookingScheduler() {
+      const grid = document.getElementById("bookingDateGrid");
+      const slotWrap = document.getElementById("bookingSlotWrap");
+      const slotHint = document.getElementById("bookingSlotHint");
+      const form = document.getElementById("bookingForm");
+      const statusEl = document.getElementById("bookingStatus");
+      const proxyNote = document.getElementById("bookingProxyNote");
+      const dateIsoInput = document.getElementById("bookingDateIso");
+      const timeLabelInput = document.getElementById("bookingTimeLabel");
+      const submitBtn = document.getElementById("bookingSubmitBtn");
+
+      if (!grid || !form || !slotWrap || !slotHint) {
+        return;
+      }
+
+      const proxyUrl = LISTING.site && LISTING.site.booking_proxy_url
+        ? String(LISTING.site.booking_proxy_url).trim()
+        : "";
+
+      if (!proxyUrl) {
+        if (proxyNote) {
+          proxyNote.classList.remove("hidden");
+          proxyNote.textContent =
+            "Once the booking endpoint is deployed, requests save to Airtable automatically. Until then, use Get in Touch below — showings are generally available 9am–7pm daily (30-minute slots).";
+        }
+        if (submitBtn) {
+          submitBtn.disabled = true;
+        }
+      }
+
+      const today = new Date();
+      today.setHours(0, 0, 0, 0);
+
+      const dows = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
+      dows.forEach((label) => {
+        const el = document.createElement("div");
+        el.className = "booking-dow";
+        el.textContent = label;
+        grid.appendChild(el);
+      });
+
+      let selectedDateBtn = null;
+      let selectedSlotBtn = null;
+      let selectedDate = null;
+
+      function renderSlots() {
+        slotWrap.innerHTML = "";
+        if (!selectedDate) {
+          return;
+        }
+        BOOKING_SLOT_MINUTES.forEach((mins) => {
+          const label = formatSlotLabel(mins);
+          const b = document.createElement("button");
+          b.type = "button";
+          b.className = "booking-slot-btn";
+          b.textContent = label;
+          b.addEventListener("click", () => {
+            if (selectedSlotBtn) {
+              selectedSlotBtn.classList.remove("selected");
+            }
+            b.classList.add("selected");
+            selectedSlotBtn = b;
+            timeLabelInput.value = label;
+          });
+          slotWrap.appendChild(b);
+        });
+      }
+
+      const blockedDates = new Set(["2026-05-06"]);
+
+      for (let i = 0; i < 28; i += 1) {
+        const d = new Date(today);
+        d.setDate(today.getDate() + i);
+        const iso = isoDateLocal(d);
+        if (blockedDates.has(iso)) {
+          continue;
+        }
+        const btn = document.createElement("button");
+        btn.type = "button";
+        btn.className = "booking-date-btn";
+        btn.dataset.iso = iso;
+        btn.innerHTML =
+          `<span class="booking-day-num">${d.getDate()}</span><span class="booking-day-wd">${dows[d.getDay()]}</span>`;
+        btn.addEventListener("click", () => {
+          if (selectedDateBtn) {
+            selectedDateBtn.classList.remove("selected");
+          }
+          btn.classList.add("selected");
+          selectedDateBtn = btn;
+          selectedDate = btn.dataset.iso;
+          dateIsoInput.value = selectedDate;
+          if (selectedSlotBtn) {
+            selectedSlotBtn.classList.remove("selected");
+          }
+          selectedSlotBtn = null;
+          timeLabelInput.value = "";
+          renderSlots();
+          slotHint.textContent = `Times for ${selectedDate}`;
+        });
+        grid.appendChild(btn);
+      }
+
+      form.addEventListener("submit", async (event) => {
+        event.preventDefault();
+        statusEl.textContent = "";
+        if (!proxyUrl) {
+          statusEl.textContent = "Booking backend not configured yet.";
+          return;
+        }
+        if (!dateIsoInput.value || !timeLabelInput.value) {
+          statusEl.textContent = "Please choose a date and time.";
+          return;
+        }
+        const payload = {
+          name: document.getElementById("bookingName").value.trim(),
+          email: document.getElementById("bookingEmail").value.trim(),
+          phone: document.getElementById("bookingPhone").value.trim(),
+          showingDate: dateIsoInput.value,
+          showingTime: timeLabelInput.value,
+          moveInPreference: document.getElementById("bookingMoveIn").value.trim()
+        };
+        submitBtn.disabled = true;
+        submitBtn.textContent = "Sending…";
+        try {
+          const response = await fetch(proxyUrl, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(payload)
+          });
+          const responseText = await response.text();
+          if (!response.ok) {
+            throw new Error(responseText || response.statusText);
+          }
+          const addr = `${LISTING.property.address_line1}, ${LISTING.property.unit}`;
+          try {
+            await postToFormsubmit({
+              _subject: `Showing request - ${addr} - ${payload.showingDate} ${payload.showingTime}`,
+              name: payload.name,
+              email: payload.email,
+              phone: payload.phone,
+              showing_date: payload.showingDate,
+              showing_time: payload.showingTime,
+              move_in_preference: payload.moveInPreference,
+              message: `Showing request for ${addr}. Date: ${payload.showingDate}. Time: ${payload.showingTime}. Move-in preference: ${payload.moveInPreference}.`
+            });
+          } catch (_) {
+            /* Airtable saved; FormSubmit email is best-effort */
+          }
+          statusEl.textContent = "Requested. We'll confirm your showing soon.";
+          form.reset();
+          dateIsoInput.value = "";
+          timeLabelInput.value = "";
+          if (selectedSlotBtn) {
+            selectedSlotBtn.classList.remove("selected");
+          }
+          if (selectedDateBtn) {
+            selectedDateBtn.classList.remove("selected");
+          }
+          selectedSlotBtn = null;
+          selectedDateBtn = null;
+          selectedDate = null;
+          slotWrap.innerHTML = "";
+          slotHint.textContent = "Select a date first.";
+        } catch (err) {
+          statusEl.textContent = "Could not save your request. Try again or use Get in Touch.";
+        } finally {
+          submitBtn.disabled = !proxyUrl;
+          submitBtn.textContent = "Request this slot";
+        }
+      });
+    }
+
+    initBookingScheduler();
+
     const revealObserver = new IntersectionObserver((entries, observer) => {
       entries.forEach((entry) => {
         if (entry.isIntersecting) {
@@ -477,14 +698,5 @@ ${listing.site.site_url}`;
 
     document.querySelectorAll(".reveal").forEach((element) => revealObserver.observe(element));
   </script>
-
-  <!-- Cal floating-popup embed code begins -->
-  <script type="text/javascript">
-    (function (C, A, L) { let p = function (a, ar) { a.q.push(ar); }; let d = C.document; C.Cal = C.Cal || function () { let cal = C.Cal; let ar = arguments; if (!cal.loaded) { cal.ns = {}; cal.q = cal.q || []; d.head.appendChild(d.createElement("script")).src = A; cal.loaded = true; } if (ar[0] === L) { const api = function () { p(api, arguments); }; const namespace = ar[1]; api.q = api.q || []; if(typeof namespace === "string"){cal.ns[namespace] = cal.ns[namespace] || api;p(cal.ns[namespace], ar);p(cal, ["initNamespace", namespace]);} else p(cal, ar); return;} p(cal, ar); }; })(window, "https://app.cal.com/embed/embed.js", "init");
-    Cal("init", "451-heath", {origin:"https://app.cal.com"});
-    Cal.ns["451-heath"]("floatingButton", {"calLink":"swftstudios/451-heath","config":{"layout":"month_view","useSlotsViewOnSmallScreen":"true"}});
-    Cal.ns["451-heath"]("ui", {"hideEventTypeDetails":false,"layout":"month_view"});
-  </script>
-  <!-- Cal floating-popup embed code ends -->
 </body>
 </html>

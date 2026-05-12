@@ -415,6 +415,21 @@ ${listing.site.site_url}`;
           if (!response.ok) {
             throw new Error(responseText || response.statusText);
           }
+          const addr = `${LISTING.property.address_line1}, ${LISTING.property.unit}`;
+          try {
+            await postToFormsubmit({
+              _subject: `Showing request - ${addr} - ${payload.showingDate} ${payload.showingTime}`,
+              name: payload.name,
+              email: payload.email,
+              phone: payload.phone,
+              showing_date: payload.showingDate,
+              showing_time: payload.showingTime,
+              move_in_preference: payload.moveInPreference,
+              message: `Showing request for ${addr}. Date: ${payload.showingDate}. Time: ${payload.showingTime}. Move-in preference: ${payload.moveInPreference}.`
+            });
+          } catch (_) {
+            /* Airtable saved; FormSubmit email is best-effort */
+          }
           statusEl.textContent = "Requested. We'll confirm your showing soon.";
           form.reset();
           dateIsoInput.value = "";
