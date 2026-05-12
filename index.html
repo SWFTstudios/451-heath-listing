@@ -31,8 +31,17 @@ body {
 
 .container { max-width: 1100px; margin: 0 auto; padding: 0 24px; }
 .nav { position: sticky; top: 0; z-index: 5; background: rgba(234, 231, 225, 0.92); border-bottom: 1px solid var(--border); }
-.nav-inner { min-height: 64px; display: flex; align-items: center; justify-content: space-between; }
+.nav-inner { min-height: 64px; display: flex; align-items: center; justify-content: space-between; gap: 16px; flex-wrap: wrap; }
 .nav-brand { font-size: 0.8rem; letter-spacing: 0.1em; text-transform: uppercase; color: var(--ink-mid); font-weight: 600; }
+.nav-actions { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; }
+.nav-link {
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--ink-mid);
+  text-decoration: none;
+  white-space: nowrap;
+}
+.nav-link:hover { color: var(--accent); }
 
 section { padding: 56px 0; }
 .hero { padding-top: 76px; }
@@ -87,6 +96,8 @@ h2 { font-family: "DM Serif Display", serif; font-size: clamp(1.6rem, 3vw, 2.3re
 .two-col { display: grid; grid-template-columns: 1fr 340px; gap: 28px; align-items: start; }
 .card { background: var(--cream-mid); border: 1px solid var(--border); border-radius: 12px; padding: 18px; }
 .stack p { margin: 0 0 12px; color: var(--ink-mid); }
+.stack-note { margin: 12px 0 0; font-size: 0.95rem; color: var(--ink-mid); }
+.stack-note a { color: var(--accent); font-weight: 600; }
 .chips { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 14px; }
 .chip { border: 1px solid var(--border); border-radius: 999px; padding: 6px 12px; font-size: 0.8rem; background: var(--cream); }
 .stack-sm p { margin: 6px 0; font-size: 0.9rem; }
@@ -120,8 +131,24 @@ h2 { font-family: "DM Serif Display", serif; font-size: clamp(1.6rem, 3vw, 2.3re
 .loc-icon svg { width: 18px; height: 18px; }
 
 .map { width: 100%; min-height: 320px; border: 1px solid var(--border); border-radius: 10px; }
-form input { width: 100%; margin-bottom: 10px; padding: 10px 12px; border-radius: 8px; border: 1px solid var(--border); font: inherit; }
+form input,
+form textarea { width: 100%; margin-bottom: 10px; padding: 10px 12px; border-radius: 8px; border: 1px solid var(--border); font: inherit; }
+form textarea { min-height: 96px; resize: vertical; }
 .field-label { margin: 6px 0 8px; font-size: 0.84rem; font-weight: 600; color: var(--ink-mid); }
+.field-hint { margin: 0 0 8px; font-size: 0.82rem; color: var(--ink-muted); line-height: 1.45; }
+.application-context-block { margin-bottom: 4px; }
+.next-steps-actions { margin: 8px 0 20px; }
+.application-credit-note {
+  max-width: 720px;
+  margin: 0;
+  padding: 14px 16px;
+  border-radius: 10px;
+  border: 1px solid var(--border);
+  background: var(--cream-mid);
+  color: var(--ink-mid);
+  font-size: 0.95rem;
+}
+.application-credit-note a { color: var(--accent); font-weight: 600; }
 .realtor-options { border: 1px solid var(--border); border-radius: 10px; padding: 10px 12px; margin-bottom: 10px; background: var(--white); }
 .realtor-options label { display: block; font-size: 0.9rem; margin-bottom: 6px; color: var(--ink-mid); }
 .realtor-options label:last-child { margin-bottom: 0; }
@@ -247,18 +274,21 @@ footer { background: var(--ink); color: rgba(255, 255, 255, 0.72); padding: 28px
   <nav class="nav">
     <div class="container nav-inner">
       <span class="nav-brand">451 Heath Place · Hackensack</span>
-      <a class="btn btn-dark" href="#schedule-showing">Schedule a Tour</a>
+      <div class="nav-actions">
+        <a class="nav-link" href="#next-steps">Apply / Next Steps</a>
+        <a class="btn btn-dark" href="#schedule-showing">Schedule a Tour</a>
+      </div>
     </div>
   </nav>
 
   <section class="hero">
     <div class="container hero-grid">
       <div>
-        <p class="eyebrow h-anim-1">Available June 1st — Hackensack, NJ</p>
+        <p class="eyebrow h-anim-1">Available June 1st or sooner — Hackensack, NJ</p>
         <h1 class="h-anim-2">451 Heath Place<br />Apt 2</h1>
         <p class="subhead h-anim-3">Hackensack, NJ 07601 - Bergen County</p>
         <p class="price h-anim-4">$1,925 <span>/ month</span></p>
-        <p class="offer h-anim-4">No Realtor Fee - Move In Ready June 1st</p>
+        <p class="offer h-anim-4">No Realtor Fee - Move In Ready June 1st or Sooner</p>
       </div>
       <div class="hero-image h-anim-img">
         <img src="images/hero.jpg" alt="451 Heath Place interior" />
@@ -286,13 +316,13 @@ footer { background: var(--ink); color: rgba(255, 255, 255, 0.72); padding: 28px
       <div>
         <p class="eyebrow">About This Home</p>
         <h2>663 sq ft of Comfortable City Living</h2>
-        <div class="stack"><p>Welcome to 451 Heath Place, Apt 2 - a bright, garden-style 1-bedroom condo tucked into a quiet courtyard setting in Hackensack, NJ. Step inside and head up the private staircase to your sun-filled retreat on the second floor.</p><p>The open floor plan makes excellent use of 663 square feet - a large, light-filled living and dining area flows naturally through the space. The updated kitchen features new flooring, fresh countertops, and a brand-new refrigerator. The bedroom comfortably fits a king-size bed, and additional furniture is available on request.</p><p>Heat, hot water, and parking are all included in rent. Move in knowing your biggest utility costs are covered - rare for Bergen County. Need to move in sooner? The unit can be ready as early as May 15th - reach out and we'll work something out.</p></div>
-        <div class="chips"><span class="chip">Heat Included</span><span class="chip">Hot Water Included</span><span class="chip">Parking Included</span><span class="chip">Courtyard Setting</span><span class="chip">Garden Style</span><span class="chip">Open Floor Plan</span><span class="chip">2nd Floor Walk-Up</span><span class="chip">Pets Considered</span><span class="chip">Built 1950</span></div>
+        <div class="stack"><p>Welcome to 451 Heath Place, Apt 2 - a bright, garden-style 1-bedroom condo tucked into a quiet courtyard setting in Hackensack, NJ. Step inside and head up the private staircase to your sun-filled retreat on the second floor.</p><p>The open floor plan makes excellent use of 663 square feet - a large, light-filled living and dining area flows naturally through the space. The updated kitchen features new flooring, fresh countertops, and a brand-new refrigerator. The bedroom comfortably fits a king-size bed, and additional furniture is available on request.</p><p>Heat and hot water are included in rent. Move-in is June 1st or sooner by arrangement. Pets are allowed. Parking includes on-street spaces plus private resident parking in the community: you may have more than one vehicle, but resident spots are first come, first served each day - if a spot is open you may use it; if not, plan to park on the street. The street sweeper runs twice weekly: Tuesday at 7am (park on the side of the street closest to the apartment) and Friday at 9am (park on the side across the street from the apartment).</p></div>
+        <div class="chips"><span class="chip">Heat Included</span><span class="chip">Hot Water Included</span><span class="chip">Street + Resident Parking</span><span class="chip">Courtyard Setting</span><span class="chip">Garden Style</span><span class="chip">Open Floor Plan</span><span class="chip">2nd Floor Walk-Up</span><span class="chip">Pets Allowed</span><span class="chip">Built 1950</span></div>
       </div>
       <aside class="card">
         <h3>$1,925 / month</h3>
-        <p class="offer-sm">No Realtor Fee - Move In Ready June 1st</p>
-        <div class="stack-sm"><p><strong>Bedrooms:</strong> 1 Bed</p><p><strong>Bathrooms:</strong> 1 Bath</p><p><strong>Size:</strong> 663 sq ft</p><p><strong>Utilities:</strong> Heat + Hot Water + Parking</p></div>
+        <p class="offer-sm">No Realtor Fee - Move In Ready June 1st or Sooner</p>
+        <div class="stack-sm"><p><strong>Bedrooms:</strong> 1 Bed</p><p><strong>Bathrooms:</strong> 1 Bath</p><p><strong>Size:</strong> 663 sq ft</p><p><strong>Move-In:</strong> June 1st or sooner</p><p><strong>Utilities:</strong> Heat + Hot Water</p></div>
       </aside>
     </div>
   </section>
@@ -301,7 +331,7 @@ footer { background: var(--ink); color: rgba(255, 255, 255, 0.72); padding: 28px
     <div class="container">
       <p class="eyebrow">What's Included</p>
       <h2>Everything You Need, Day One</h2>
-      <div class="feature-grid reveal reveal-delay-1"><article class="feature-card"><div class="feat-icon-wrap"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M17.657 18.657A8 8 0 016.343 7.343S7 9 9 10c0-2 .5-5 2.986-7C14 5 16.09 5.777 17.656 7.343A7.975 7.975 0 0120 13a7.975 7.975 0 01-2.343 5.657z"/></svg></div><h3>Heat Included</h3><p>Natural gas radiator heat - no winter utility surprises.</p></article><article class="feature-card"><div class="feat-icon-wrap"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M19.428 15.428a2 2 0 00-1.022-.547l-2.387-.477a6 6 0 00-3.86.517l-.318.158a6 6 0 01-3.86.517L6.05 15.21a2 2 0 00-1.806.547M8 4h8l-1 1v5.172a2 2 0 00.586 1.414l5 5c1.26 1.26.367 3.414-1.415 3.414H4.828c-1.782 0-2.674-2.154-1.414-3.414l5-5A2 2 0 009 10.172V5L8 4z"/></svg></div><h3>Hot Water Included</h3><p>Hot water covered - one less bill to think about.</p></article><article class="feature-card"><div class="feat-icon-wrap"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M5 13l4 4L19 7"/></svg></div><h3>Parking Included</h3><p>Your own dedicated spot - no permit stress.</p></article><article class="feature-card"><div class="feat-icon-wrap"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"/></svg></div><h3>Private Walk-Up</h3><p>Your own staircase entrance - garden-style privacy.</p></article><article class="feature-card"><div class="feat-icon-wrap"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9 7h6m0 10v-3m-3 3h.01M9 17h.01M9 14h.01M12 14h.01M15 11h.01M12 11h.01M9 11h.01M7 21h10a2 2 0 002-2V5a2 2 0 00-2-2H7a2 2 0 00-2 2v14a2 2 0 002 2z"/></svg></div><h3>Updated Kitchen</h3><p>New floors, new countertops, brand-new refrigerator.</p></article><article class="feature-card"><div class="feat-icon-wrap"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"/></svg></div><h3>Furnished Option</h3><p>King bed in bedroom plus living room furniture available.</p></article><article class="feature-card"><div class="feat-icon-wrap"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"/></svg></div><h3>Pets Considered</h3><p>Pets welcome on a case-by-case basis - ask us.</p></article><article class="feature-card"><div class="feat-icon-wrap"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M3.055 11H5a2 2 0 012 2v1a2 2 0 002 2 2 2 0 012 2v2.945M8 3.935V5.5A2.5 2.5 0 0010.5 8h.5a2 2 0 012 2 2 2 0 104 0 2 2 0 012-2h1.064M15 20.488V18a2 2 0 012-2h3.064M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg></div><h3>Courtyard Setting</h3><p>Quiet, private community with serene outdoor space.</p></article></div>
+      <div class="feature-grid reveal reveal-delay-1"><article class="feature-card"><div class="feat-icon-wrap"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M17.657 18.657A8 8 0 016.343 7.343S7 9 9 10c0-2 .5-5 2.986-7C14 5 16.09 5.777 17.656 7.343A7.975 7.975 0 0120 13a7.975 7.975 0 01-2.343 5.657z"/></svg></div><h3>Heat Included</h3><p>Natural gas radiator heat - no winter utility surprises.</p></article><article class="feature-card"><div class="feat-icon-wrap"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M19.428 15.428a2 2 0 00-1.022-.547l-2.387-.477a6 6 0 00-3.86.517l-.318.158a6 6 0 01-3.86.517L6.05 15.21a2 2 0 00-1.806.547M8 4h8l-1 1v5.172a2 2 0 00.586 1.414l5 5c1.26 1.26.367 3.414-1.415 3.414H4.828c-1.782 0-2.674-2.154-1.414-3.414l5-5A2 2 0 009 10.172V5L8 4z"/></svg></div><h3>Hot Water Included</h3><p>Hot water covered - one less bill to think about.</p></article><article class="feature-card"><div class="feat-icon-wrap"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M5 13l4 4L19 7"/></svg></div><h3>Parking</h3><p>On-street parking plus private resident parking. More than one car is fine; resident spaces are first come, first served daily. Street sweeper: Tuesday 7am (park on the side closest to the unit), Friday 9am (park across the street from the unit).</p></article><article class="feature-card"><div class="feat-icon-wrap"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"/></svg></div><h3>Private Walk-Up</h3><p>Your own staircase entrance - garden-style privacy.</p></article><article class="feature-card"><div class="feat-icon-wrap"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9 7h6m0 10v-3m-3 3h.01M9 17h.01M9 14h.01M12 14h.01M15 11h.01M12 11h.01M9 11h.01M7 21h10a2 2 0 002-2V5a2 2 0 00-2-2H7a2 2 0 00-2 2v14a2 2 0 002 2z"/></svg></div><h3>Updated Kitchen</h3><p>New floors, new countertops, brand-new refrigerator.</p></article><article class="feature-card"><div class="feat-icon-wrap"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"/></svg></div><h3>Furnished Option</h3><p>King bed in bedroom plus living room furniture available.</p></article><article class="feature-card"><div class="feat-icon-wrap"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"/></svg></div><h3>Pets Allowed</h3><p>Pets are welcome. Reach out with breed or size questions if you have them.</p></article><article class="feature-card"><div class="feat-icon-wrap"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M3.055 11H5a2 2 0 012 2v1a2 2 0 002 2 2 2 0 012 2v2.945M8 3.935V5.5A2.5 2.5 0 0010.5 8h.5a2 2 0 012 2 2 2 0 104 0 2 2 0 012-2h1.064M15 20.488V18a2 2 0 012-2h3.064M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg></div><h3>Courtyard Setting</h3><p>Quiet, private community with serene outdoor space.</p></article></div>
     </div>
   </section>
 
@@ -309,7 +339,7 @@ footer { background: var(--ink); color: rgba(255, 255, 255, 0.72); padding: 28px
     <div class="container">
       <p class="eyebrow">At a Glance</p>
       <h2>Property Details</h2>
-      <div class="detail-grid reveal reveal-delay-1"><article class="detail-card"><p><strong><span class="detail-icon"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg></span>Monthly Rent</strong></p><p>$1,925</p></article><article class="detail-card"><p><strong><span class="detail-icon"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 8V4m0 0h4M4 4l5 5m11-1V4m0 0h-4m4 0l-5 5M4 16v4m0 0h4m-4 0l5-5m11 5l-5-5m5 5v-4m0 4h-4"/></svg></span>Square Footage</strong></p><p>663 sq ft</p></article><article class="detail-card"><p><strong><span class="detail-icon"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/></svg></span>Year Built</strong></p><p>1950</p></article><article class="detail-card"><p><strong><span class="detail-icon"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"/></svg></span>Property Type</strong></p><p>Condominium</p></article><article class="detail-card"><p><strong><span class="detail-icon"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"/></svg></span>Utilities Included</strong></p><p>Heat + Hot Water</p></article><article class="detail-card"><p><strong><span class="detail-icon"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 3v4M3 5h4M6 17v4m-2-2h4m5-16l2.286 6.857L21 12l-5.714 2.143L13 21l-2.286-6.857L5 12l5.714-2.143L13 3z"/></svg></span>Style</strong></p><p>Garden / Walk-Up</p></article></div>
+      <div class="detail-grid reveal reveal-delay-1"><article class="detail-card"><p><strong><span class="detail-icon"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg></span>Monthly Rent</strong></p><p>$1,925</p></article><article class="detail-card"><p><strong><span class="detail-icon"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 8V4m0 0h4M4 4l5 5m11-1V4m0 0h-4m4 0l-5 5M4 16v4m0 0h4m-4 0l5-5m11 5l-5-5m5 5v-4m0 4h-4"/></svg></span>Move-In</strong></p><p>June 1st or sooner</p></article><article class="detail-card"><p><strong><span class="detail-icon"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/></svg></span>Square Footage</strong></p><p>663 sq ft</p></article><article class="detail-card"><p><strong><span class="detail-icon"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"/></svg></span>Year Built</strong></p><p>1950</p></article><article class="detail-card"><p><strong><span class="detail-icon"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"/></svg></span>Property Type</strong></p><p>Condominium</p></article><article class="detail-card"><p><strong><span class="detail-icon"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 3v4M3 5h4M6 17v4m-2-2h4m5-16l2.286 6.857L21 12l-5.714 2.143L13 21l-2.286-6.857L5 12l5.714-2.143L13 3z"/></svg></span>Utilities Included</strong></p><p>Heat + Hot Water</p></article><article class="detail-card"><p><strong><span class="detail-icon"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg></span>Style</strong></p><p>Garden / Walk-Up</p></article></div>
     </div>
   </section>
 
@@ -321,6 +351,18 @@ footer { background: var(--ink); color: rgba(255, 255, 255, 0.72); padding: 28px
         <iframe class="map" title="map" loading="lazy" allowfullscreen src="https://maps.google.com/maps?q=451+Heath+Place+Hackensack+NJ+07601&output=embed"></iframe>
       </div>
       <div class="location-list"><article class="location-card"><h3><span class="loc-icon"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"/></svg></span>NYC Access</h3><p>Bus and train connections to Midtown Manhattan.</p></article><article class="location-card"><h3><span class="loc-icon"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"/></svg></span>Hackensack Univ. Medical Center</h3><p>Top-ranked hospital minutes away.</p></article><article class="location-card"><h3><span class="loc-icon"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"/></svg></span>Shopping and Dining</h3><p>Restaurants, grocery, and retail nearby.</p></article><article class="location-card"><h3><span class="loc-icon"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 14l9-5-9-5-9 5 9 5z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 14l6.16-3.422a12.083 12.083 0 01.665 6.479A11.952 11.952 0 0012 20.055a11.952 11.952 0 00-6.824-2.998 12.078 12.078 0 01.665-6.479L12 14z"/></svg></span>Public Schools</h3><p>Hackensack public schools in close proximity.</p></article><article class="location-card"><h3><span class="loc-icon"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 3v4M3 5h4M6 17v4m-2-2h4m5-16l2.286 6.857L21 12l-5.714 2.143L13 21l-2.286-6.857L5 12l5.714-2.143L13 3z"/></svg></span>Quiet Residential Street</h3><p>Courtyard building in a calm neighborhood.</p></article></div>
+    </div>
+  </section>
+
+  <section id="next-steps">
+    <div class="container">
+      <p class="eyebrow">Rental Application</p>
+      <h2>Next Steps</h2>
+      <p class="booking-lede">Open or download the <strong>Next Steps</strong> packet (checklist, how to apply, and what to submit). It is hosted on Google Drive so you always see the latest version.</p>
+      <div class="next-steps-actions reveal">
+        <a class="btn btn-dark" href="https://drive.google.com/file/d/1NwJDSIv0h8e-ZndqL5YvrEXStECKfalr/view?usp=sharing" target="_blank" rel="noopener noreferrer">View &amp; download Next Steps (PDF)</a>
+      </div>
+      <p class="application-credit-note reveal reveal-delay-1"><strong>Worried about credit?</strong> Please apply anyway. Applications are reviewed holistically. When you use <a href="#contact">Get in Touch</a> below, use the optional notes box to add context alongside your documents so nothing important is missed.</p>
     </div>
   </section>
 
@@ -345,7 +387,7 @@ footer { background: var(--ink); color: rgba(255, 255, 255, 0.72); padding: 28px
             <input type="text" id="bookingName" name="booking_name" placeholder="Your name" required autocomplete="name" />
             <input type="email" id="bookingEmail" name="booking_email" placeholder="Email" required autocomplete="email" />
             <input type="tel" id="bookingPhone" name="booking_phone" placeholder="Phone" required autocomplete="tel" />
-            <input type="text" id="bookingMoveIn" name="move_in_preference" placeholder="Move-in date preference (e.g. June 1 or May 15)" required />
+            <input type="text" id="bookingMoveIn" name="move_in_preference" placeholder="Move-in: June 1st or sooner (add your preferred date)" required />
             <input type="hidden" id="bookingDateIso" name="showing_date_iso" value="" />
             <input type="hidden" id="bookingTimeLabel" name="showing_time_label" value="" />
             <button type="submit" class="btn btn-dark" id="bookingSubmitBtn">Request this slot</button>
@@ -361,8 +403,9 @@ footer { background: var(--ink); color: rgba(255, 255, 255, 0.72); padding: 28px
     <div class="container two-col reveal">
       <div>
         <p class="eyebrow">Get in Touch</p>
-        <h2>Ready to Make a Move?</h2>
-        <p>This listing is data-driven and generated from your intake package.</p>
+        <h2>Ready to Apply?</h2>
+        <p>Request the listing details by email. If you are assembling an application and want us to review your situation in full (including if you are concerned about credit), still reach out. Use the optional notes box to add context with your documents so we can look at everything holistically.</p>
+        <p class="stack-note"><a href="#next-steps">Open the Next Steps packet</a> for the full application checklist.</p>
       </div>
       <div class="card">
         <form id="contactForm">
@@ -379,6 +422,11 @@ footer { background: var(--ink); color: rgba(255, 255, 255, 0.72); padding: 28px
             <input type="email" name="realtor_email" id="realtorEmail" placeholder="Realtor email" />
             <input type="tel" name="realtor_phone" id="realtorPhone" placeholder="Realtor phone (optional)" />
           </div>
+          <div class="application-context-block">
+            <p class="field-label">Optional: application notes</p>
+            <p class="field-hint">Add context you want considered with your application or documents (for example, credit history, employment gaps, or co-signer plans).</p>
+            <textarea name="application_context" id="applicationContext" rows="4" placeholder="Anything we should know when reviewing your application…"></textarea>
+          </div>
           <button type="submit" class="btn btn-dark">Send Me the Details</button>
           <p id="formStatus"></p>
         </form>
@@ -394,15 +442,21 @@ footer { background: var(--ink); color: rgba(255, 255, 255, 0.72); padding: 28px
   </footer>
 
   <script>
-    const LISTING = {"id": "451-heath", "property": {"address_line1": "451 Heath Place", "unit": "Apt 2", "city": "Hackensack", "state": "NJ", "zip": "07601", "county": "Bergen County", "rent": 1925, "bedrooms": 1, "bathrooms": 1, "sqft": 663, "year_built": 1950, "property_type": "Condominium", "style": "Garden / 2nd Floor Walk-Up", "floor": "2nd floor walk-up", "available": "Available June 1st", "offer": "No Realtor Fee - Move In Ready June 1st", "description_paragraphs": ["Welcome to 451 Heath Place, Apt 2 - a bright, garden-style 1-bedroom condo tucked into a quiet courtyard setting in Hackensack, NJ. Step inside and head up the private staircase to your sun-filled retreat on the second floor.", "The open floor plan makes excellent use of 663 square feet - a large, light-filled living and dining area flows naturally through the space. The updated kitchen features new flooring, fresh countertops, and a brand-new refrigerator. The bedroom comfortably fits a king-size bed, and additional furniture is available on request.", "Heat, hot water, and parking are all included in rent. Move in knowing your biggest utility costs are covered - rare for Bergen County. Need to move in sooner? The unit can be ready as early as May 15th - reach out and we'll work something out."], "chips": ["Heat Included", "Hot Water Included", "Parking Included", "Courtyard Setting", "Garden Style", "Open Floor Plan", "2nd Floor Walk-Up", "Pets Considered", "Built 1950"], "features": [{"name": "Heat Included", "description": "Natural gas radiator heat - no winter utility surprises."}, {"name": "Hot Water Included", "description": "Hot water covered - one less bill to think about."}, {"name": "Parking Included", "description": "Your own dedicated spot - no permit stress."}, {"name": "Private Walk-Up", "description": "Your own staircase entrance - garden-style privacy."}, {"name": "Updated Kitchen", "description": "New floors, new countertops, brand-new refrigerator."}, {"name": "Furnished Option", "description": "King bed in bedroom plus living room furniture available."}, {"name": "Pets Considered", "description": "Pets welcome on a case-by-case basis - ask us."}, {"name": "Courtyard Setting", "description": "Quiet, private community with serene outdoor space."}], "details": [{"key": "Monthly Rent", "value": "$1,925"}, {"key": "Square Footage", "value": "663 sq ft"}, {"key": "Year Built", "value": "1950"}, {"key": "Property Type", "value": "Condominium"}, {"key": "Utilities Included", "value": "Heat + Hot Water"}, {"key": "Style", "value": "Garden / Walk-Up"}], "neighborhood": [{"name": "NYC Access", "description": "Bus and train connections to Midtown Manhattan."}, {"name": "Hackensack Univ. Medical Center", "description": "Top-ranked hospital minutes away."}, {"name": "Shopping and Dining", "description": "Restaurants, grocery, and retail nearby."}, {"name": "Public Schools", "description": "Hackensack public schools in close proximity."}, {"name": "Quiet Residential Street", "description": "Courtyard building in a calm neighborhood."}], "map_query": "451+Heath+Place+Hackensack+NJ+07601", "hero_alt": "451 Heath Place interior"}, "agent": {"name": "Roosevelt Hall", "title": "REALTOR", "brokerage": "Coldwell Banker Realty", "office_address": "50 Broadway, Hillsdale, NJ 07642", "mobile": "(201) 280-6333", "office": "(201) 599-1100", "profile_url": "https://www.realtor.com/realestateagents/5673e76b89a689010069dbc1"}, "site": {"lead_email": "elombe@swftstudios.com", "booking_proxy_url": "https://451-heath-booking-proxy.elombe.workers.dev", "airtable_base_id": "appx3jGQIAp1lzwW0", "airtable_table_id": "tblERKv4TuOnkYFRS", "site_url": "https://swftstudios.github.io/451-heath-listing/", "pdf_url": "https://swftstudios.github.io/451-heath-listing/listing-info.pdf", "disclaimer": "Presented directly by the owner. All information believed accurate but not warranted. Subject to prior rental."}, "assets": {"hero": "hero.jpg", "photos": [{"file": "photo1.jpg", "label": "LIVING ROOM", "alt": "Spacious living room with large sectional and natural light"}, {"file": "photo2.jpg", "label": "KITCHEN", "alt": "Updated kitchen with granite counters, gas range, and stainless fridge"}, {"file": "photo3.jpg", "label": "BEDROOM", "alt": "King-size bedroom with ceiling fan and ample natural light"}, {"file": "photo4.jpg", "label": "BATHROOM", "alt": "Full bathroom with tub/shower, vanity, and classic black-and-white tile"}, {"file": "photo5.jpg", "label": "EXTERIOR", "alt": "Classic brick building exterior with lush courtyard lawn"}]}, "theme": {"style": "cream-modern", "palette": {"ink": "#1c1917", "accent": "#d4521e", "cream": "#eae7e1", "cream_mid": "#f2f0ec", "white": "#ffffff", "muted": "#78716c", "light_ink": "#b4b0aa", "faint": "#8c8882"}}};
+    const LISTING = {"id": "451-heath", "property": {"address_line1": "451 Heath Place", "unit": "Apt 2", "city": "Hackensack", "state": "NJ", "zip": "07601", "county": "Bergen County", "rent": 1925, "bedrooms": 1, "bathrooms": 1, "sqft": 663, "year_built": 1950, "property_type": "Condominium", "style": "Garden / 2nd Floor Walk-Up", "floor": "2nd floor walk-up", "available": "Available June 1st or sooner", "offer": "No Realtor Fee - Move In Ready June 1st or Sooner", "description_paragraphs": ["Welcome to 451 Heath Place, Apt 2 - a bright, garden-style 1-bedroom condo tucked into a quiet courtyard setting in Hackensack, NJ. Step inside and head up the private staircase to your sun-filled retreat on the second floor.", "The open floor plan makes excellent use of 663 square feet - a large, light-filled living and dining area flows naturally through the space. The updated kitchen features new flooring, fresh countertops, and a brand-new refrigerator. The bedroom comfortably fits a king-size bed, and additional furniture is available on request.", "Heat and hot water are included in rent. Move-in is June 1st or sooner by arrangement. Pets are allowed. Parking includes on-street spaces plus private resident parking in the community: you may have more than one vehicle, but resident spots are first come, first served each day - if a spot is open you may use it; if not, plan to park on the street. The street sweeper runs twice weekly: Tuesday at 7am (park on the side of the street closest to the apartment) and Friday at 9am (park on the side across the street from the apartment)."], "chips": ["Heat Included", "Hot Water Included", "Street + Resident Parking", "Courtyard Setting", "Garden Style", "Open Floor Plan", "2nd Floor Walk-Up", "Pets Allowed", "Built 1950"], "features": [{"name": "Heat Included", "description": "Natural gas radiator heat - no winter utility surprises."}, {"name": "Hot Water Included", "description": "Hot water covered - one less bill to think about."}, {"name": "Parking", "description": "On-street parking plus private resident parking. More than one car is fine; resident spaces are first come, first served daily. Street sweeper: Tuesday 7am (park on the side closest to the unit), Friday 9am (park across the street from the unit)."}, {"name": "Private Walk-Up", "description": "Your own staircase entrance - garden-style privacy."}, {"name": "Updated Kitchen", "description": "New floors, new countertops, brand-new refrigerator."}, {"name": "Furnished Option", "description": "King bed in bedroom plus living room furniture available."}, {"name": "Pets Allowed", "description": "Pets are welcome. Reach out with breed or size questions if you have them."}, {"name": "Courtyard Setting", "description": "Quiet, private community with serene outdoor space."}], "details": [{"key": "Monthly Rent", "value": "$1,925"}, {"key": "Move-In", "value": "June 1st or sooner"}, {"key": "Square Footage", "value": "663 sq ft"}, {"key": "Year Built", "value": "1950"}, {"key": "Property Type", "value": "Condominium"}, {"key": "Utilities Included", "value": "Heat + Hot Water"}, {"key": "Style", "value": "Garden / Walk-Up"}], "neighborhood": [{"name": "NYC Access", "description": "Bus and train connections to Midtown Manhattan."}, {"name": "Hackensack Univ. Medical Center", "description": "Top-ranked hospital minutes away."}, {"name": "Shopping and Dining", "description": "Restaurants, grocery, and retail nearby."}, {"name": "Public Schools", "description": "Hackensack public schools in close proximity."}, {"name": "Quiet Residential Street", "description": "Courtyard building in a calm neighborhood."}], "map_query": "451+Heath+Place+Hackensack+NJ+07601", "hero_alt": "451 Heath Place interior"}, "agent": {"name": "Roosevelt Hall", "title": "REALTOR", "brokerage": "Coldwell Banker Realty", "office_address": "50 Broadway, Hillsdale, NJ 07642", "mobile": "(201) 280-6333", "office": "(201) 599-1100", "profile_url": "https://www.realtor.com/realestateagents/5673e76b89a689010069dbc1"}, "site": {"lead_email": "elombe@swftstudios.com", "next_steps_url": "https://drive.google.com/file/d/1NwJDSIv0h8e-ZndqL5YvrEXStECKfalr/view?usp=sharing", "booking_proxy_url": "https://451-heath-booking-proxy.elombe.workers.dev", "airtable_base_id": "appx3jGQIAp1lzwW0", "airtable_table_id": "tblERKv4TuOnkYFRS", "site_url": "https://swftstudios.github.io/451-heath-listing/", "pdf_url": "https://swftstudios.github.io/451-heath-listing/listing-info.pdf", "disclaimer": "Presented directly by the owner. All information believed accurate but not warranted. Subject to prior rental."}, "assets": {"hero": "hero.jpg", "photos": [{"file": "photo1.jpg", "label": "LIVING ROOM", "alt": "Spacious living room with large sectional and natural light"}, {"file": "photo2.jpg", "label": "KITCHEN", "alt": "Updated kitchen with granite counters, gas range, and stainless fridge"}, {"file": "photo3.jpg", "label": "BEDROOM", "alt": "King-size bedroom with ceiling fan and ample natural light"}, {"file": "photo4.jpg", "label": "BATHROOM", "alt": "Full bathroom with tub/shower, vanity, and classic black-and-white tile"}, {"file": "photo5.jpg", "label": "EXTERIOR", "alt": "Classic brick building exterior with lush courtyard lawn"}]}, "theme": {"style": "cream-modern", "palette": {"ink": "#1c1917", "accent": "#d4521e", "cream": "#eae7e1", "cream_mid": "#f2f0ec", "white": "#ffffff", "muted": "#78716c", "light_ink": "#b4b0aa", "faint": "#8c8882"}}};
     const FS_ENDPOINT = `https://formsubmit.co/ajax/${LISTING.site.lead_email}`;
 
     function buildAutoReply(name, listing) {
+      const nextSteps = listing.site.next_steps_url
+        ? `Next Steps packet (Google Drive):
+${listing.site.next_steps_url}
+
+`
+        : "";
       return `Hi ${name},
 
 Thanks for your interest in ${listing.property.address_line1}, ${listing.property.unit}!
 
-Download the full property info sheet (PDF):
+${nextSteps}Download the full property info sheet (PDF):
 ${listing.site.pdf_url}
 
 Monthly Rent: $${listing.property.rent}
@@ -449,6 +503,7 @@ ${listing.site.site_url}`;
       button.textContent = "Sending...";
 
       try {
+        const applicationContext = document.getElementById("applicationContext");
         await postToFormsubmit({
           _subject: `Listing Info Request - ${LISTING.property.address_line1}, ${LISTING.property.unit}`,
           name: form.name.value,
@@ -458,6 +513,7 @@ ${listing.site.site_url}`;
           realtor_name: form.realtor_name.value || "",
           realtor_email: form.realtor_email.value || "",
           realtor_phone: form.realtor_phone.value || "",
+          application_context: applicationContext ? applicationContext.value.trim() : "",
           _autoresponse: buildAutoReply(form.name.value, LISTING)
         });
         status.textContent = "Sent. Check your inbox.";
@@ -581,7 +637,7 @@ ${listing.site.site_url}`;
         });
       }
 
-      const blockedDates = new Set(["2026-05-06"]);
+      const blockedDates = new Set();
 
       for (let i = 0; i < 28; i += 1) {
         const d = new Date(today);

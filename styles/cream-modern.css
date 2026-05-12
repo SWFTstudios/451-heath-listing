@@ -20,8 +20,17 @@ body {
 
 .container { max-width: 1100px; margin: 0 auto; padding: 0 24px; }
 .nav { position: sticky; top: 0; z-index: 5; background: rgba(234, 231, 225, 0.92); border-bottom: 1px solid var(--border); }
-.nav-inner { min-height: 64px; display: flex; align-items: center; justify-content: space-between; }
+.nav-inner { min-height: 64px; display: flex; align-items: center; justify-content: space-between; gap: 16px; flex-wrap: wrap; }
 .nav-brand { font-size: 0.8rem; letter-spacing: 0.1em; text-transform: uppercase; color: var(--ink-mid); font-weight: 600; }
+.nav-actions { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; }
+.nav-link {
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--ink-mid);
+  text-decoration: none;
+  white-space: nowrap;
+}
+.nav-link:hover { color: var(--accent); }
 
 section { padding: 56px 0; }
 .hero { padding-top: 76px; }
@@ -76,6 +85,8 @@ h2 { font-family: "DM Serif Display", serif; font-size: clamp(1.6rem, 3vw, 2.3re
 .two-col { display: grid; grid-template-columns: 1fr 340px; gap: 28px; align-items: start; }
 .card { background: var(--cream-mid); border: 1px solid var(--border); border-radius: 12px; padding: 18px; }
 .stack p { margin: 0 0 12px; color: var(--ink-mid); }
+.stack-note { margin: 12px 0 0; font-size: 0.95rem; color: var(--ink-mid); }
+.stack-note a { color: var(--accent); font-weight: 600; }
 .chips { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 14px; }
 .chip { border: 1px solid var(--border); border-radius: 999px; padding: 6px 12px; font-size: 0.8rem; background: var(--cream); }
 .stack-sm p { margin: 6px 0; font-size: 0.9rem; }
@@ -109,8 +120,24 @@ h2 { font-family: "DM Serif Display", serif; font-size: clamp(1.6rem, 3vw, 2.3re
 .loc-icon svg { width: 18px; height: 18px; }
 
 .map { width: 100%; min-height: 320px; border: 1px solid var(--border); border-radius: 10px; }
-form input { width: 100%; margin-bottom: 10px; padding: 10px 12px; border-radius: 8px; border: 1px solid var(--border); font: inherit; }
+form input,
+form textarea { width: 100%; margin-bottom: 10px; padding: 10px 12px; border-radius: 8px; border: 1px solid var(--border); font: inherit; }
+form textarea { min-height: 96px; resize: vertical; }
 .field-label { margin: 6px 0 8px; font-size: 0.84rem; font-weight: 600; color: var(--ink-mid); }
+.field-hint { margin: 0 0 8px; font-size: 0.82rem; color: var(--ink-muted); line-height: 1.45; }
+.application-context-block { margin-bottom: 4px; }
+.next-steps-actions { margin: 8px 0 20px; }
+.application-credit-note {
+  max-width: 720px;
+  margin: 0;
+  padding: 14px 16px;
+  border-radius: 10px;
+  border: 1px solid var(--border);
+  background: var(--cream-mid);
+  color: var(--ink-mid);
+  font-size: 0.95rem;
+}
+.application-credit-note a { color: var(--accent); font-weight: 600; }
 .realtor-options { border: 1px solid var(--border); border-radius: 10px; padding: 10px 12px; margin-bottom: 10px; background: var(--white); }
 .realtor-options label { display: block; font-size: 0.9rem; margin-bottom: 6px; color: var(--ink-mid); }
 .realtor-options label:last-child { margin-bottom: 0; }

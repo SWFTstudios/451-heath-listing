@@ -15,22 +15,22 @@
     "property_type": "Condominium",
     "style": "Garden / 2nd Floor Walk-Up",
     "floor": "2nd floor walk-up",
-    "available": "Available June 1st",
-    "offer": "No Realtor Fee - Move In Ready June 1st",
+    "available": "Available June 1st or sooner",
+    "offer": "No Realtor Fee - Move In Ready June 1st or Sooner",
     "description_paragraphs": [
       "Welcome to 451 Heath Place, Apt 2 - a bright, garden-style 1-bedroom condo tucked into a quiet courtyard setting in Hackensack, NJ. Step inside and head up the private staircase to your sun-filled retreat on the second floor.",
       "The open floor plan makes excellent use of 663 square feet - a large, light-filled living and dining area flows naturally through the space. The updated kitchen features new flooring, fresh countertops, and a brand-new refrigerator. The bedroom comfortably fits a king-size bed, and additional furniture is available on request.",
-      "Heat, hot water, and parking are all included in rent. Move in knowing your biggest utility costs are covered - rare for Bergen County. Need to move in sooner? The unit can be ready as early as May 15th - reach out and we'll work something out."
+      "Heat and hot water are included in rent. Move-in is June 1st or sooner by arrangement. Pets are allowed. Parking includes on-street spaces plus private resident parking in the community: you may have more than one vehicle, but resident spots are first come, first served each day - if a spot is open you may use it; if not, plan to park on the street. The street sweeper runs twice weekly: Tuesday at 7am (park on the side of the street closest to the apartment) and Friday at 9am (park on the side across the street from the apartment)."
     ],
     "chips": [
       "Heat Included",
       "Hot Water Included",
-      "Parking Included",
+      "Street + Resident Parking",
       "Courtyard Setting",
       "Garden Style",
       "Open Floor Plan",
       "2nd Floor Walk-Up",
-      "Pets Considered",
+      "Pets Allowed",
       "Built 1950"
     ],
     "features": [
@@ -43,8 +43,8 @@
         "description": "Hot water covered - one less bill to think about."
       },
       {
-        "name": "Parking Included",
-        "description": "Your own dedicated spot - no permit stress."
+        "name": "Parking",
+        "description": "On-street parking plus private resident parking. More than one car is fine; resident spaces are first come, first served daily. Street sweeper: Tuesday 7am (park on the side closest to the unit), Friday 9am (park across the street from the unit)."
       },
       {
         "name": "Private Walk-Up",
@@ -59,8 +59,8 @@
         "description": "King bed in bedroom plus living room furniture available."
       },
       {
-        "name": "Pets Considered",
-        "description": "Pets welcome on a case-by-case basis - ask us."
+        "name": "Pets Allowed",
+        "description": "Pets are welcome. Reach out with breed or size questions if you have them."
       },
       {
         "name": "Courtyard Setting",
@@ -69,6 +69,7 @@
     ],
     "details": [
       { "key": "Monthly Rent", "value": "$1,925" },
+      { "key": "Move-In", "value": "June 1st or sooner" },
       { "key": "Square Footage", "value": "663 sq ft" },
       { "key": "Year Built", "value": "1950" },
       { "key": "Property Type", "value": "Condominium" },
@@ -111,6 +112,7 @@
   },
   "site": {
     "lead_email": "elombe@swftstudios.com",
+    "next_steps_url": "https://drive.google.com/file/d/1NwJDSIv0h8e-ZndqL5YvrEXStECKfalr/view?usp=sharing",
     "booking_proxy_url": "https://451-heath-booking-proxy.elombe.workers.dev",
     "airtable_base_id": "appx3jGQIAp1lzwW0",
     "airtable_table_id": "tblERKv4TuOnkYFRS",

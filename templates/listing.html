@@ -16,7 +16,10 @@ __INLINE_STYLE__
   <nav class="nav">
     <div class="container nav-inner">
       <span class="nav-brand">__NAV_BRAND__</span>
-      <a class="btn btn-dark" href="#schedule-showing">Schedule a Tour</a>
+      <div class="nav-actions">
+        <a class="nav-link" href="#next-steps">Apply / Next Steps</a>
+        <a class="btn btn-dark" href="#schedule-showing">Schedule a Tour</a>
+      </div>
     </div>
   </nav>
 
@@ -93,6 +96,18 @@ __INLINE_STYLE__
     </div>
   </section>
 
+  <section id="next-steps">
+    <div class="container">
+      <p class="eyebrow">Rental Application</p>
+      <h2>Next Steps</h2>
+      <p class="booking-lede">Open or download the <strong>Next Steps</strong> packet (checklist, how to apply, and what to submit). It is hosted on Google Drive so you always see the latest version.</p>
+      <div class="next-steps-actions reveal">
+        <a class="btn btn-dark" href="__NEXT_STEPS_URL__" target="_blank" rel="noopener noreferrer">View &amp; download Next Steps (PDF)</a>
+      </div>
+      <p class="application-credit-note reveal reveal-delay-1"><strong>Worried about credit?</strong> Please apply anyway. Applications are reviewed holistically. When you use <a href="#contact">Get in Touch</a> below, use the optional notes box to add context alongside your documents so nothing important is missed.</p>
+    </div>
+  </section>
+
   <section id="schedule-showing">
     <div class="container">
       <p class="eyebrow">Book a Showing</p>
@@ -114,7 +129,7 @@ __INLINE_STYLE__
             <input type="text" id="bookingName" name="booking_name" placeholder="Your name" required autocomplete="name" />
             <input type="email" id="bookingEmail" name="booking_email" placeholder="Email" required autocomplete="email" />
             <input type="tel" id="bookingPhone" name="booking_phone" placeholder="Phone" required autocomplete="tel" />
-            <input type="text" id="bookingMoveIn" name="move_in_preference" placeholder="Move-in date preference (e.g. June 1 or May 15)" required />
+            <input type="text" id="bookingMoveIn" name="move_in_preference" placeholder="Move-in: June 1st or sooner (add your preferred date)" required />
             <input type="hidden" id="bookingDateIso" name="showing_date_iso" value="" />
             <input type="hidden" id="bookingTimeLabel" name="showing_time_label" value="" />
             <button type="submit" class="btn btn-dark" id="bookingSubmitBtn">Request this slot</button>
@@ -130,8 +145,9 @@ __INLINE_STYLE__
     <div class="container two-col reveal">
       <div>
         <p class="eyebrow">Get in Touch</p>
-        <h2>Ready to Make a Move?</h2>
-        <p>This listing is data-driven and generated from your intake package.</p>
+        <h2>Ready to Apply?</h2>
+        <p>Request the listing details by email. If you are assembling an application and want us to review your situation in full (including if you are concerned about credit), still reach out. Use the optional notes box to add context with your documents so we can look at everything holistically.</p>
+        <p class="stack-note"><a href="#next-steps">Open the Next Steps packet</a> for the full application checklist.</p>
       </div>
       <div class="card">
         <form id="contactForm">
@@ -147,6 +163,11 @@ __INLINE_STYLE__
             <input type="text" name="realtor_name" id="realtorName" placeholder="Realtor name" />
             <input type="email" name="realtor_email" id="realtorEmail" placeholder="Realtor email" />
             <input type="tel" name="realtor_phone" id="realtorPhone" placeholder="Realtor phone (optional)" />
+          </div>
+          <div class="application-context-block">
+            <p class="field-label">Optional: application notes</p>
+            <p class="field-hint">Add context you want considered with your application or documents (for example, credit history, employment gaps, or co-signer plans).</p>
+            <textarea name="application_context" id="applicationContext" rows="4" placeholder="Anything we should know when reviewing your application…"></textarea>
           </div>
           <button type="submit" class="btn btn-dark">Send Me the Details</button>
           <p id="formStatus"></p>
@@ -167,11 +188,17 @@ __INLINE_STYLE__
     const FS_ENDPOINT = `https://formsubmit.co/ajax/${LISTING.site.lead_email}`;
 
     function buildAutoReply(name, listing) {
+      const nextSteps = listing.site.next_steps_url
+        ? `Next Steps packet (Google Drive):
+${listing.site.next_steps_url}
+
+`
+        : "";
       return `Hi ${name},
 
 Thanks for your interest in ${listing.property.address_line1}, ${listing.property.unit}!
 
-Download the full property info sheet (PDF):
+${nextSteps}Download the full property info sheet (PDF):
 ${listing.site.pdf_url}
 
 Monthly Rent: $${listing.property.rent}
@@ -218,6 +245,7 @@ ${listing.site.site_url}`;
       button.textContent = "Sending...";
 
       try {
+        const applicationContext = document.getElementById("applicationContext");
         await postToFormsubmit({
           _subject: `Listing Info Request - ${LISTING.property.address_line1}, ${LISTING.property.unit}`,
           name: form.name.value,
@@ -227,6 +255,7 @@ ${listing.site.site_url}`;
           realtor_name: form.realtor_name.value || "",
           realtor_email: form.realtor_email.value || "",
           realtor_phone: form.realtor_phone.value || "",
+          application_context: applicationContext ? applicationContext.value.trim() : "",
           _autoresponse: buildAutoReply(form.name.value, LISTING)
         });
         status.textContent = "Sent. Check your inbox.";
@@ -350,7 +379,7 @@ ${listing.site.site_url}`;
         });
       }
 
-      const blockedDates = new Set(["2026-05-06"]);
+      const blockedDates = new Set();
 
       for (let i = 0; i < 28; i += 1) {
         const d = new Date(today);
