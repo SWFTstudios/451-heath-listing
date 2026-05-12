@@ -31,17 +31,31 @@ body {
 
 .container { max-width: 1100px; margin: 0 auto; padding: 0 24px; }
 .nav { position: sticky; top: 0; z-index: 5; background: rgba(234, 231, 225, 0.92); border-bottom: 1px solid var(--border); }
-.nav-inner { min-height: 64px; display: flex; align-items: center; justify-content: space-between; gap: 16px; flex-wrap: wrap; }
-.nav-brand { font-size: 0.8rem; letter-spacing: 0.1em; text-transform: uppercase; color: var(--ink-mid); font-weight: 600; }
-.nav-actions { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; }
-.nav-link {
-  font-size: 0.85rem;
-  font-weight: 600;
-  color: var(--ink-mid);
-  text-decoration: none;
-  white-space: nowrap;
+.nav-inner {
+  min-height: 64px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  flex-wrap: wrap;
 }
-.nav-link:hover { color: var(--accent); }
+.nav-brand { font-size: 0.8rem; letter-spacing: 0.1em; text-transform: uppercase; color: var(--ink-mid); font-weight: 600; }
+.nav-actions {
+  display: flex;
+  align-items: stretch;
+  gap: 10px;
+  flex-wrap: nowrap;
+}
+.nav-actions .btn {
+  white-space: nowrap;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 10px 18px;
+  font-size: clamp(0.78rem, 0.35vw + 0.72rem, 0.9rem);
+  line-height: 1.2;
+  text-align: center;
+}
 
 section { padding: 56px 0; }
 .hero { padding-top: 76px; }
@@ -165,7 +179,21 @@ form textarea { min-height: 96px; resize: vertical; }
   cursor: pointer;
   font: inherit;
 }
-.btn-dark { background: var(--ink); color: var(--white); }
+.btn-dark {
+  background: var(--ink);
+  color: var(--white);
+}
+.btn-dark:hover { background: #292524; }
+.btn-outline {
+  background: var(--white);
+  color: var(--ink);
+  border: 2px solid var(--ink);
+}
+.btn-outline:hover {
+  background: var(--cream-mid);
+  border-color: var(--ink-mid);
+  color: var(--ink-mid);
+}
 
 /* Showing scheduler */
 .booking-lede { color: var(--ink-mid); margin: 0 0 24px; max-width: 720px; }
@@ -254,6 +282,26 @@ footer { background: var(--ink); color: rgba(255, 255, 255, 0.72); padding: 28px
   .booking-date-grid { grid-template-columns: repeat(4, 1fr); }
 }
 
+@media (max-width: 720px) {
+  .nav-inner {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 12px;
+    padding-top: 12px;
+    padding-bottom: 12px;
+  }
+  .nav-brand { text-align: center; }
+  .nav-actions {
+    flex-direction: column;
+    width: 100%;
+    flex-wrap: nowrap;
+  }
+  .nav-actions .btn {
+    width: 100%;
+    min-height: 44px;
+  }
+}
+
 @media (prefers-reduced-motion: reduce) {
   .reveal,
   .h-anim-1,
@@ -275,7 +323,7 @@ footer { background: var(--ink); color: rgba(255, 255, 255, 0.72); padding: 28px
     <div class="container nav-inner">
       <span class="nav-brand">451 Heath Place · Hackensack</span>
       <div class="nav-actions">
-        <a class="nav-link" href="#next-steps">Apply / Next Steps</a>
+        <a class="btn btn-outline" href="#next-steps">Apply / Next Steps</a>
         <a class="btn btn-dark" href="#schedule-showing">Schedule a Tour</a>
       </div>
     </div>
