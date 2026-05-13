@@ -20,11 +20,13 @@
     "description_paragraphs": [
       "Welcome to 451 Heath Place, Apt 2 - a bright, garden-style 1-bedroom condo tucked into a quiet courtyard setting in Hackensack, NJ. Step inside and head up the private staircase to your sun-filled retreat on the second floor.",
       "The open floor plan makes excellent use of 663 square feet - a large, light-filled living and dining area flows naturally through the space. The updated kitchen features new flooring, fresh countertops, and a brand-new refrigerator. The bedroom comfortably fits a king-size bed, and additional furniture is available on request.",
-      "Heat and hot water are included in rent. Move-in is June 1st or sooner by arrangement. Pets are allowed. Parking includes on-street spaces plus private resident parking in the community: you may have more than one vehicle, but resident spots are first come, first served each day - if a spot is open you may use it; if not, plan to park on the street. The street sweeper runs twice weekly: Tuesday at 7am (park on the side of the street closest to the apartment) and Friday at 9am (park on the side across the street from the apartment)."
+      "Heat and hot water are included in rent. Move-in is June 1st or sooner by arrangement. Pets are allowed. Parking includes on-street spaces plus private resident parking in the community: you may have more than one vehicle, but resident spots are first come, first served each day - if a spot is open you may use it; if not, plan to park on the street. The street sweeper runs twice weekly: Tuesday at 7am (park on the side of the street closest to the apartment) and Friday at 9am (park on the side across the street from the apartment).",
+      "Residents share laundry facilities on the premises for the community, located on the same block as the apartment - no need to go far for wash day."
     ],
     "chips": [
       "Heat Included",
       "Hot Water Included",
+      "Shared Laundry",
       "Street + Resident Parking",
       "Courtyard Setting",
       "Garden Style",
@@ -41,6 +43,10 @@
       {
         "name": "Hot Water Included",
         "description": "Hot water covered - one less bill to think about."
+      },
+      {
+        "name": "Shared Laundry",
+        "description": "Shared laundry on the premises for residents, on the same block as the apartment - convenient community laundry without leaving the block."
       },
       {
         "name": "Parking",
