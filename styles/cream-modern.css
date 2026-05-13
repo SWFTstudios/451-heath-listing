@@ -102,7 +102,28 @@ h2 { font-family: "DM Serif Display", serif; font-size: clamp(1.6rem, 3vw, 2.3re
 .stack-note { margin: 12px 0 0; font-size: 0.95rem; color: var(--ink-mid); }
 .stack-note a { color: var(--accent); font-weight: 600; }
 .chips { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 14px; }
-.chip { border: 1px solid var(--border); border-radius: 999px; padding: 6px 12px; font-size: 0.8rem; background: var(--cream); }
+.chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4em;
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  padding: 6px 12px 6px 10px;
+  font-size: 0.8rem;
+  background: var(--cream);
+  max-width: 100%;
+}
+.chip-icon {
+  display: inline-flex;
+  flex-shrink: 0;
+  width: 1.05em;
+  height: 1.05em;
+  align-items: center;
+  justify-content: center;
+  color: var(--accent);
+}
+.chip-icon svg { width: 100%; height: 100%; }
+.chip-text { line-height: 1.25; }
 .stack-sm p { margin: 6px 0; font-size: 0.9rem; }
 
 .feature-grid, .detail-grid, .location-list { display: grid; gap: 12px; }

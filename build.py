@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import argparse
+import html
 import json
 from pathlib import Path
 from typing import Any
@@ -43,6 +44,107 @@ LOCATION_ICON_SVGS = [
     '<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 14l9-5-9-5-9 5 9 5z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 14l6.16-3.422a12.083 12.083 0 01.665 6.479A11.952 11.952 0 0012 20.055a11.952 11.952 0 00-6.824-2.998 12.078 12.078 0 01.665-6.479L12 14z"/></svg>',
     '<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 3v4M3 5h4M6 17v4m-2-2h4m5-16l2.286 6.857L21 12l-5.714 2.143L13 21l-2.286-6.857L5 12l5.714-2.143L13 3z"/></svg>',
 ]
+
+# Heroicons-style stroke icons matched to chip meaning (24x24, stroke-width 1.5).
+_SVG_CHIP_DEFAULT = (
+    '<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">'
+    '<path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75L11.25 15 15 9.75M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>'
+    "</svg>"
+)
+_SVG_CHIP_HEAT = (
+    '<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">'
+    '<path stroke-linecap="round" stroke-linejoin="round" d="M17.657 18.657A8 8 0 016.343 7.343S7 9 9 10c0-2 .5-5 2.986-7C14 5 16.09 5.777 17.656 7.343A7.975 7.975 0 0120 13a7.975 7.975 0 01-2.343 5.657z"/>'
+    "</svg>"
+)
+_SVG_CHIP_HOT_WATER = (
+    '<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">'
+    '<path stroke-linecap="round" stroke-linejoin="round" d="M12 2.25c-3 4.5-6.75 7.5-6.75 10.5a6.75 6.75 0 1013.5 0c0-3-3.75-6-6.75-10.5z"/>'
+    "</svg>"
+)
+_SVG_CHIP_LAUNDRY = (
+    '<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">'
+    '<path stroke-linecap="round" stroke-linejoin="round" d="M7.5 4.5h9A2.25 2.25 0 0118.75 6.75v10.5A2.25 2.25 0 0116.5 19.5h-9A2.25 2.25 0 015.25 17.25V6.75A2.25 2.25 0 017.5 4.5z"/>'
+    '<path stroke-linecap="round" stroke-linejoin="round" d="M7.5 4.5V3.75A.75.75 0 018.25 3h7.5a.75.75 0 01.75.75V4.5"/>'
+    '<circle cx="12" cy="13" r="2.75"/>'
+    '<path stroke-linecap="round" stroke-linejoin="round" d="M9 8.25h.008v.008H9V8.25zm2.25 0h.008v.008h-.008V8.25zm2.25 0h.008v.008h-.008V8.25z"/>'
+    "</svg>"
+)
+_SVG_CHIP_PARKING = (
+    '<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">'
+    '<path stroke-linecap="round" stroke-linejoin="round" d="M15 10.5a3 3 0 11-6 0 3 3 0 016 0z"/>'
+    '<path stroke-linecap="round" stroke-linejoin="round" d="M19.5 10.5c0 7.142-7.5 11.25-7.5 11.25S4.5 17.642 4.5 10.5a7.5 7.5 0 1115 0z"/>'
+    "</svg>"
+)
+_SVG_CHIP_SUN_OUTDOOR = (
+    '<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">'
+    '<path stroke-linecap="round" stroke-linejoin="round" d="M12 3v2.25m6.364.886l-1.591 1.591M21 12h-2.25m-.886 6.364l-1.591-1.591M12 18.75V21m-4.773-4.227l-1.591 1.591M5.25 12H3m4.227-4.773L5.636 5.636M15.75 12a3.75 3.75 0 11-7.5 0 3.75 3.75 0 017.5 0z"/>'
+    "</svg>"
+)
+_SVG_CHIP_LEAF = (
+    '<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">'
+    '<path stroke-linecap="round" stroke-linejoin="round" d="M12 21c-4.5-3-7.5-6.75-7.5-10.5A7.5 7.5 0 0119.5 6c0 3.75-3 7.5-7.5 10.5z"/>'
+    '<path stroke-linecap="round" stroke-linejoin="round" d="M12 21V11"/>'
+    "</svg>"
+)
+_SVG_CHIP_GRID_LAYOUT = (
+    '<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">'
+    '<path stroke-linecap="round" stroke-linejoin="round" d="M3.75 6A2.25 2.25 0 016 3.75h2.25A2.25 2.25 0 0110.5 6v2.25a2.25 2.25 0 01-2.25 2.25H6a2.25 2.25 0 01-2.25-2.25V6zM3.75 15.75A2.25 2.25 0 016 13.5h2.25a2.25 2.25 0 012.25 2.25V18a2.25 2.25 0 01-2.25 2.25H6A2.25 2.25 0 013.75 18v-2.25zM13.5 6a2.25 2.25 0 012.25-2.25H18A2.25 2.25 0 0120.25 6v2.25A2.25 2.25 0 0118 10.5h-2.25a2.25 2.25 0 01-2.25-2.25V6zM13.5 15.75a2.25 2.25 0 012.25-2.25H18a2.25 2.25 0 012.25 2.25V18A2.25 2.25 0 0118 20.25h-2.25A2.25 2.25 0 0113.5 18v-2.25z"/>'
+    "</svg>"
+)
+_SVG_CHIP_STAIRS = (
+    '<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">'
+    '<path stroke-linecap="round" stroke-linejoin="round" d="M5 19h14M5 15h10M5 11h6M5 7h3"/>'
+    "</svg>"
+)
+_SVG_CHIP_HEART = (
+    '<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">'
+    '<path stroke-linecap="round" stroke-linejoin="round" d="M21 8.25c0-2.485-2.099-4.5-4.688-4.5-1.935 0-3.597 1.126-4.312 2.733C11.285 4.876 9.623 3.75 7.688 3.75 5.1 3.75 3 5.765 3 8.25c0 7.22 9 12 9 12s9-4.78 9-12z"/>'
+    "</svg>"
+)
+_SVG_CHIP_CALENDAR = (
+    '<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">'
+    '<path stroke-linecap="round" stroke-linejoin="round" d="M6.75 3v2.25M17.25 3v2.25M3 18.75V7.5a2.25 2.25 0 012.25-2.25h13.5A2.25 2.25 0 0121 7.5v11.25m-18 0A2.25 2.25 0 005.25 21h13.5a2.25 2.25 0 002.25-2.25m-18 0v-7.5A2.25 2.25 0 015.25 9h13.5a2.25 2.25 0 012.25 2.25m-18 0v7.5"/>'
+    "</svg>"
+)
+
+
+def _chip_icon_svg(label: str) -> str:
+    low = label.strip().lower()
+    if "heat" in low and "water" not in low:
+        return _SVG_CHIP_HEAT
+    if "hot water" in low or ("water" in low and "hot" in low):
+        return _SVG_CHIP_HOT_WATER
+    if "laundry" in low or "washer" in low or "dryer" in low:
+        return _SVG_CHIP_LAUNDRY
+    if "parking" in low or "garage" in low or "car" in low or "street" in low:
+        return _SVG_CHIP_PARKING
+    if "courtyard" in low or "patio" in low or "deck" in low or "balcony" in low:
+        return _SVG_CHIP_SUN_OUTDOOR
+    if "garden" in low or "yard" in low or "lawn" in low:
+        return _SVG_CHIP_LEAF
+    if "floor plan" in low or ("open" in low and "plan" in low):
+        return _SVG_CHIP_GRID_LAYOUT
+    if "walk" in low or "stair" in low:
+        return _SVG_CHIP_STAIRS
+    if "pet" in low or "dog" in low or "cat" in low:
+        return _SVG_CHIP_HEART
+    if "built" in low or low.startswith("year "):
+        return _SVG_CHIP_CALENDAR
+    if "open" in low:
+        return _SVG_CHIP_GRID_LAYOUT
+    return _SVG_CHIP_DEFAULT
+
+
+def _render_chips(chips: list[str]) -> str:
+    return "".join(
+        (
+            f'<span class="chip">'
+            f'<span class="chip-icon" aria-hidden="true">{_chip_icon_svg(label)}</span>'
+            f'<span class="chip-text">{html.escape(label.strip())}</span>'
+            f"</span>"
+        )
+        for label in chips
+    )
 
 
 def _fmt_money(value: float | int) -> str:
@@ -94,11 +196,7 @@ def _render_photo_grid(photos: list[dict[str, Any]]) -> str:
     )
 
 
-def _render_list(values: list[str], class_name: str) -> str:
-    return "".join(f'<span class="{class_name}">{v}</span>' for v in values)
-
-
-def _build_html(listing: dict[str, Any], style_text: str) -> str:
+def _render_photo_grid(photos: list[dict[str, Any]]) -> str:
     template_path = ROOT / "templates" / "listing.html"
     template = template_path.read_text(encoding="utf-8")
 
@@ -134,7 +232,7 @@ def _build_html(listing: dict[str, Any], style_text: str) -> str:
         "PHOTO_GRID_ITEMS": _render_photo_grid(photos),
         "ABOUT_TITLE": f"{prop['sqft']} sq ft of Comfortable City Living",
         "DESCRIPTION_PARAGRAPHS": "".join(f"<p>{p}</p>" for p in prop["description_paragraphs"]),
-        "CHIPS": _render_list(prop["chips"], "chip"),
+        "CHIPS": _render_chips(prop["chips"]),
         "SIDEBAR_FACTS": "".join(sidebar_facts),
         "FEATURE_ITEMS": _render_feature_items(prop["features"]),
         "DETAIL_ITEMS": _render_detail_items(prop["details"]),
