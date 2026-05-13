@@ -17,17 +17,6 @@ from tools.listing_utils import (
 
 ROOT = Path(__file__).parent
 
-FEATURE_ICON_SVGS = [
-    '<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M17.657 18.657A8 8 0 016.343 7.343S7 9 9 10c0-2 .5-5 2.986-7C14 5 16.09 5.777 17.656 7.343A7.975 7.975 0 0120 13a7.975 7.975 0 01-2.343 5.657z"/></svg>',
-    '<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M19.428 15.428a2 2 0 00-1.022-.547l-2.387-.477a6 6 0 00-3.86.517l-.318.158a6 6 0 01-3.86.517L6.05 15.21a2 2 0 00-1.806.547M8 4h8l-1 1v5.172a2 2 0 00.586 1.414l5 5c1.26 1.26.367 3.414-1.415 3.414H4.828c-1.782 0-2.674-2.154-1.414-3.414l5-5A2 2 0 009 10.172V5L8 4z"/></svg>',
-    '<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M5 13l4 4L19 7"/></svg>',
-    '<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"/></svg>',
-    '<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9 7h6m0 10v-3m-3 3h.01M9 17h.01M9 14h.01M12 14h.01M15 11h.01M12 11h.01M9 11h.01M7 21h10a2 2 0 002-2V5a2 2 0 00-2-2H7a2 2 0 00-2 2v14a2 2 0 002 2z"/></svg>',
-    '<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"/></svg>',
-    '<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"/></svg>',
-    '<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M3.055 11H5a2 2 0 012 2v1a2 2 0 002 2 2 2 0 012 2v2.945M8 3.935V5.5A2.5 2.5 0 0010.5 8h.5a2 2 0 012 2 2 2 0 104 0 2 2 0 012-2h1.064M15 20.488V18a2 2 0 012-2h3.064M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>',
-]
-
 DETAIL_ICON_SVGS = [
     '<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>',
     '<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 8V4m0 0h4M4 4l5 5m11-1V4m0 0h-4m4 0l-5 5M4 16v4m0 0h4m-4 0l5-5m11 5l-5-5m5 5v-4m0 4h-4"/></svg>',
@@ -107,32 +96,69 @@ _SVG_CHIP_CALENDAR = (
     "</svg>"
 )
 
+_SVG_FEATURE_HOME = (
+    '<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">'
+    '<path stroke-linecap="round" stroke-linejoin="round" d="M2.25 12l8.954-8.955c.44-.439 1.152-.439 1.591 0L21.75 12M4.5 9.75v10.125c0 .621.504 1.125 1.125 1.125H9.75v-4.875c0-.621.504-1.125 1.125-1.125h2.25c.621 0 1.125.504 1.125 1.125V21h4.875c.621 0 1.125-.504 1.125-1.125V9.75M8.25 21h8.25"/>'
+    "</svg>"
+)
+_SVG_FEATURE_KITCHEN = (
+    '<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">'
+    '<path stroke-linecap="round" stroke-linejoin="round" d="M3.75 13.5l10.5-11.25L12 10.5h8.25L9.75 21.75 12 13.5H3.75z"/>'
+    "</svg>"
+)
+_SVG_FEATURE_CUBE = (
+    '<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">'
+    '<path stroke-linecap="round" stroke-linejoin="round" d="m21 16.5-5.25-3.048m-10.5 0L3 16.5m6.75-3.75L12 20.25l2.25-7.5m-9-4.5h18M3.75 6h16.5L12 2.25 3.75 6z"/>'
+    "</svg>"
+)
 
-def _chip_icon_svg(label: str) -> str:
-    low = label.strip().lower()
-    if "heat" in low and "water" not in low:
-        return _SVG_CHIP_HEAT
-    if "hot water" in low or ("water" in low and "hot" in low):
-        return _SVG_CHIP_HOT_WATER
+
+def _amenity_icon_from_text(low: str) -> str:
+    """Pick a semantic SVG (24x24 outline) for chips and feature cards from combined lowercase text."""
+    if "private" in low and ("walk" in low or "walk-up" in low or "walk up" in low or "stair" in low or "entrance" in low):
+        return _SVG_FEATURE_HOME
+    if (
+        "kitchen" in low
+        or "refrigerator" in low
+        or "countertop" in low
+        or "counter top" in low
+        or "appliance" in low
+        or "cupboard" in low
+    ):
+        return _SVG_FEATURE_KITCHEN
+    if "furnish" in low or "furniture" in low or "sectional" in low or ("king" in low and "bed" in low) or "dresser" in low:
+        return _SVG_FEATURE_CUBE
     if "laundry" in low or "washer" in low or "dryer" in low:
         return _SVG_CHIP_LAUNDRY
-    if "parking" in low or "garage" in low or "car" in low or "street" in low:
-        return _SVG_CHIP_PARKING
     if "courtyard" in low or "patio" in low or "deck" in low or "balcony" in low:
         return _SVG_CHIP_SUN_OUTDOOR
-    if "garden" in low or "yard" in low or "lawn" in low:
+    if ("garden" in low or "yard" in low or "lawn" in low) and "garden-style" not in low:
         return _SVG_CHIP_LEAF
+    if "parking" in low or "garage" in low or "street" in low or ("car" in low and "electric" not in low):
+        return _SVG_CHIP_PARKING
+    if "pet" in low or "dog" in low or "cat" in low:
+        return _SVG_CHIP_HEART
+    if "hot water" in low or ("water" in low and "hot" in low):
+        return _SVG_CHIP_HOT_WATER
+    if "heat" in low and "water" not in low:
+        return _SVG_CHIP_HEAT
     if "floor plan" in low or ("open" in low and "plan" in low):
         return _SVG_CHIP_GRID_LAYOUT
     if "walk" in low or "stair" in low:
         return _SVG_CHIP_STAIRS
-    if "pet" in low or "dog" in low or "cat" in low:
-        return _SVG_CHIP_HEART
     if "built" in low or low.startswith("year "):
         return _SVG_CHIP_CALENDAR
     if "open" in low:
         return _SVG_CHIP_GRID_LAYOUT
     return _SVG_CHIP_DEFAULT
+
+
+def _chip_icon_svg(label: str) -> str:
+    return _amenity_icon_from_text(label.strip().lower())
+
+
+def _feature_icon_svg(name: str, description: str) -> str:
+    return _amenity_icon_from_text(f"{name} {description}".lower())
 
 
 def _render_chips(chips: list[str]) -> str:
@@ -162,10 +188,10 @@ def _render_feature_items(features: list[dict[str, Any]]) -> str:
     return "".join(
         (
             f'<article class="feature-card">'
-            f'<div class="feat-icon-wrap">{FEATURE_ICON_SVGS[i % len(FEATURE_ICON_SVGS)]}</div>'
-            f'<h3>{item["name"]}</h3><p>{item["description"]}</p></article>'
+            f'<div class="feat-icon-wrap">{_feature_icon_svg(item["name"], item.get("description", ""))}</div>'
+            f'<h3>{html.escape(item["name"])}</h3><p>{html.escape(item.get("description", ""))}</p></article>'
         )
-        for i, item in enumerate(features)
+        for item in features
     )
 
 
@@ -196,7 +222,7 @@ def _render_photo_grid(photos: list[dict[str, Any]]) -> str:
     )
 
 
-def _render_photo_grid(photos: list[dict[str, Any]]) -> str:
+def _build_html(listing: dict[str, Any], style_text: str) -> str:
     template_path = ROOT / "templates" / "listing.html"
     template = template_path.read_text(encoding="utf-8")
 
