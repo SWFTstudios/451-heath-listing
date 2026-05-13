@@ -406,6 +406,58 @@ ${listing.site.site_url}`;
       return String(responseText).slice(0, 280);
     }
 
+    function bookingFormsubmitPropertyPhrase(listing) {
+      const custom =
+        listing.site && String(listing.site.showing_inquiry_property_phrase || "").trim();
+      if (custom) {
+        return custom;
+      }
+      const p = listing.property;
+      const line = `${p.address_line1 || ""} ${p.unit || ""}`.replace(/\s+/g, " ").trim();
+      return line || "this property";
+    }
+
+    function formatShowingDateLong(iso) {
+      if (!iso) {
+        return "";
+      }
+      const parts = String(iso).split("-").map(Number);
+      if (parts.length !== 3 || parts.some((n) => Number.isNaN(n))) {
+        return String(iso);
+      }
+      const [y, m, d] = parts;
+      const dt = new Date(y, m - 1, d);
+      if (Number.isNaN(dt.getTime())) {
+        return String(iso);
+      }
+      return dt.toLocaleDateString(undefined, {
+        weekday: "long",
+        month: "long",
+        day: "numeric",
+        year: "numeric"
+      });
+    }
+
+    function buildBookingFormsubmitMessage(listing, payload) {
+      const who = String(payload.name || "").trim() || "A prospect";
+      const property = bookingFormsubmitPropertyPhrase(listing);
+      const datePart = formatShowingDateLong(payload.showingDate) || payload.showingDate || "(date not set)";
+      const timePart = String(payload.showingTime || "").trim() || "(time not set)";
+      const phoneLine = String(payload.phone || "").trim() || "—";
+      const emailLine = String(payload.email || "").trim() || "—";
+      return (
+        `${who} would like to see ${property} on ${datePart} and ${timePart}.\n\n` +
+        `You can reach them at:\n` +
+        `Phone: ${phoneLine}\n` +
+        `Email: ${emailLine}`
+      );
+    }
+
+    function bookingFormsubmitSubject(name) {
+      const n = String(name || "").trim() || "Unknown";
+      return `451 Apt Showing Inquiry from ${n}`;
+    }
+
     function initBookingScheduler() {
       const grid = document.getElementById("bookingDateGrid");
       const slotWrap = document.getElementById("bookingSlotWrap");
@@ -536,7 +588,6 @@ ${listing.site.site_url}`;
         };
         submitBtn.disabled = true;
         submitBtn.textContent = "Sending…";
-        const addr = `${LISTING.property.address_line1}, ${LISTING.property.unit}`;
         try {
           let responseText = "";
           let responseOk = false;
@@ -572,15 +623,19 @@ ${listing.site.site_url}`;
 
           if (responseOk) {
             try {
+              const inquiryMsg = buildBookingFormsubmitMessage(LISTING, payload);
+              const moveIn = String(payload.moveInPreference || "").trim();
               await postToFormsubmitAjax(FS_ENDPOINT, {
-                _subject: `Showing request - ${addr} - ${payload.showingDate} ${payload.showingTime}`,
+                _subject: bookingFormsubmitSubject(payload.name),
                 name: payload.name,
                 email: payload.email,
                 phone: payload.phone,
                 showing_date: payload.showingDate,
                 showing_time: payload.showingTime,
                 move_in_preference: payload.moveInPreference,
-                message: `Showing request for ${addr}. Date: ${payload.showingDate}. Time: ${payload.showingTime}. Move-in preference: ${payload.moveInPreference}.`
+                message:
+                  inquiryMsg +
+                  (moveIn ? `\n\nMove-in preference: ${moveIn}` : "")
               });
             } catch (_) {
               /* Airtable saved; FormSubmit email is best-effort */
@@ -590,8 +645,10 @@ ${listing.site.site_url}`;
           } else {
             const detail = formatBookingProxyError(responseText);
             const backupUrl = BOOKING_FORM_SUBMIT_BACKUP_URL || FS_ENDPOINT;
+            const inquiryMsg = buildBookingFormsubmitMessage(LISTING, payload);
+            const moveIn = String(payload.moveInPreference || "").trim();
             const backupBody = {
-              _subject: `[Showing backup — calendar did not save] ${addr} — ${payload.showingDate} ${payload.showingTime}`,
+              _subject: bookingFormsubmitSubject(payload.name),
               name: payload.name,
               email: payload.email,
               phone: payload.phone,
@@ -601,7 +658,9 @@ ${listing.site.site_url}`;
               calendar_error: detail,
               raw_response: responseText.slice(0, 4000),
               message:
-                `Calendar/Airtable save failed.\n${detail}\n\nProperty: ${addr}\nDate: ${payload.showingDate}\nTime: ${payload.showingTime}\nMove-in: ${payload.moveInPreference}\n\nVisitor email (if any): ${payload.email || "(none)"}\nVisitor phone (if any): ${payload.phone || "(none)"}`
+                inquiryMsg +
+                (moveIn ? `\n\nMove-in preference: ${moveIn}` : "") +
+                `\n\n---\nCalendar/Airtable did not save this request.\n${detail}`
             };
             try {
               await postToFormsubmitAjax(backupUrl, backupBody);

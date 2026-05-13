@@ -156,6 +156,11 @@
           "minLength": 3,
           "description": "FormSubmit.co inbox for booking backup when Airtable fails (defaults to lead_email in the template if omitted)"
         },
+        "showing_inquiry_property_phrase": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Short property line for FormSubmit showing emails (e.g. 451 Heath Pl Apt 2); falls back to address + unit if omitted"
+        },
         "airtable_base_id": { "type": "string", "minLength": 1 },
         "airtable_table_id": { "type": "string", "minLength": 1 }
       }
