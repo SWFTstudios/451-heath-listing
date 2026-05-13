@@ -498,7 +498,7 @@ footer { background: var(--ink); color: rgba(255, 255, 255, 0.72); padding: 28px
             <textarea name="application_context" id="applicationContext" rows="4" placeholder="Anything we should know when reviewing your application…"></textarea>
           </div>
           <button type="submit" class="btn btn-dark">Send Me the Details</button>
-          <p id="formStatus"></p>
+          <p id="formStatus" class="booking-status" role="status" aria-live="polite"></p>
         </form>
       </div>
     </div>
@@ -576,6 +576,41 @@ ${listing.site.site_url}`;
       return data;
     }
 
+    function buildGetInTouchFormsubmitSubject(name) {
+      const n = String(name || "").trim() || "Unknown";
+      return `451 Apt Listing inquiry from ${n}`;
+    }
+
+    function buildGetInTouchFormsubmitMessage(listing, v) {
+      const who = String(v.name || "").trim() || "A prospect";
+      const property = bookingFormsubmitPropertyPhrase(listing);
+      const email = String(v.email || "").trim() || "—";
+      const withR = v.searching_with_realtor ? "Yes" : "No";
+      const iAm = v.i_am_realtor ? "Yes" : "No";
+      const lines = [
+        `${who} requested listing details for ${property}.`,
+        "",
+        "You can reach them at:",
+        `Email: ${email}`,
+        "",
+        "Realtor status:",
+        `Searching with a realtor: ${withR}`,
+        `I am a realtor: ${iAm}`
+      ];
+      if (v.realtor_name || v.realtor_email || v.realtor_phone) {
+        lines.push(
+          "",
+          "Realtor contact:",
+          `Name: ${String(v.realtor_name || "").trim() || "—"}`,
+          `Email: ${String(v.realtor_email || "").trim() || "—"}`,
+          `Phone: ${String(v.realtor_phone || "").trim() || "—"}`
+        );
+      }
+      const notes = String(v.application_context || "").trim();
+      lines.push("", "Application notes:", notes || "—");
+      return lines.join("\n");
+    }
+
     document.getElementById("contactForm").addEventListener("submit", async (event) => {
       event.preventDefault();
       const form = event.target;
@@ -595,28 +630,50 @@ ${listing.site.site_url}`;
         }
       }
 
+      const nameVal = form.name.value.trim();
+      const emailVal = form.email.value.trim();
+      form.name.value = nameVal;
+      form.email.value = emailVal;
+
+      status.textContent = "";
       button.disabled = true;
-      button.textContent = "Sending...";
+      button.textContent = "Sending…";
 
       try {
         const applicationContext = document.getElementById("applicationContext");
+        const appNotes = applicationContext ? applicationContext.value.trim() : "";
+        const msgValues = {
+          name: nameVal,
+          email: emailVal,
+          searching_with_realtor: searchingWithRealtor.checked,
+          i_am_realtor: iAmRealtor.checked,
+          realtor_name: form.realtor_name.value.trim(),
+          realtor_email: form.realtor_email.value.trim(),
+          realtor_phone: form.realtor_phone.value.trim(),
+          application_context: appNotes
+        };
         await postToFormsubmitAjax(FS_ENDPOINT, {
-          _subject: `Listing Info Request - ${LISTING.property.address_line1}, ${LISTING.property.unit}`,
-          name: form.name.value,
-          email: form.email.value,
+          _subject: buildGetInTouchFormsubmitSubject(nameVal),
+          _replyto: emailVal,
+          name: nameVal,
+          email: emailVal,
+          message: buildGetInTouchFormsubmitMessage(LISTING, msgValues),
           searching_with_realtor: searchingWithRealtor.checked ? "Yes" : "No",
           i_am_realtor: iAmRealtor.checked ? "Yes" : "No",
-          realtor_name: form.realtor_name.value || "",
-          realtor_email: form.realtor_email.value || "",
-          realtor_phone: form.realtor_phone.value || "",
-          application_context: applicationContext ? applicationContext.value.trim() : "",
-          _autoresponse: buildAutoReply(form.name.value, LISTING)
+          realtor_name: msgValues.realtor_name,
+          realtor_email: msgValues.realtor_email,
+          realtor_phone: msgValues.realtor_phone,
+          application_context: appNotes,
+          _autoresponse: buildAutoReply(nameVal, LISTING)
         });
-        status.textContent = "Sent. Check your inbox.";
+        status.textContent = "Your message was sent. You'll hear from someone shortly.";
         form.reset();
         toggleRealtorContactFields();
       } catch (err) {
-        status.textContent = "Send failed. Please try again.";
+        status.textContent =
+          "We couldn't send that just now. Try again in a moment, or email " +
+          (LISTING.site.lead_email || "us") +
+          " directly.";
       } finally {
         button.disabled = false;
         button.textContent = "Send Me the Details";
