@@ -454,8 +454,9 @@ footer { background: var(--ink); color: rgba(255, 255, 255, 0.72); padding: 28px
           <p class="field-label">3. Your details</p>
           <form id="bookingForm">
             <input type="text" id="bookingName" name="booking_name" placeholder="Your name" required autocomplete="name" />
-            <input type="email" id="bookingEmail" name="booking_email" placeholder="Email" required autocomplete="email" />
-            <input type="tel" id="bookingPhone" name="booking_phone" placeholder="Phone" required autocomplete="tel" />
+            <p class="field-hint">Email and phone are optional, but enter at least one valid email or a phone number with at least 10 digits.</p>
+            <input type="email" id="bookingEmail" name="booking_email" placeholder="Email (optional)" autocomplete="email" />
+            <input type="tel" id="bookingPhone" name="booking_phone" placeholder="Phone (optional)" autocomplete="tel" />
             <input type="text" id="bookingMoveIn" name="move_in_preference" placeholder="Move-in: June 1st or sooner (add your preferred date)" required />
             <input type="hidden" id="bookingDateIso" name="showing_date_iso" value="" />
             <input type="hidden" id="bookingTimeLabel" name="showing_time_label" value="" />
@@ -638,6 +639,43 @@ ${listing.site.site_url}`;
       return `${y}-${mo}-${day}`;
     }
 
+    function isValidBookingEmail(s) {
+      const t = String(s).trim();
+      if (!t) {
+        return false;
+      }
+      return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(t);
+    }
+
+    function isValidBookingPhone(s) {
+      const digits = String(s).replace(/\D/g, "");
+      return digits.length >= 10;
+    }
+
+    function validateBookingEmailOrPhone(email, phone) {
+      const e = String(email).trim();
+      const p = String(phone).trim();
+      if (e && !isValidBookingEmail(e)) {
+        return {
+          ok: false,
+          message: "Please enter a valid email, or clear that field and use phone only."
+        };
+      }
+      if (p && !isValidBookingPhone(p)) {
+        return {
+          ok: false,
+          message: "Please enter a valid phone number (at least 10 digits), or clear it and use email only."
+        };
+      }
+      if (!isValidBookingEmail(e) && !isValidBookingPhone(p)) {
+        return {
+          ok: false,
+          message: "Please enter a valid email or phone number (at least one is required)."
+        };
+      }
+      return { ok: true };
+    }
+
     function formatBookingProxyError(responseText) {
       if (!responseText || !String(responseText).trim()) {
         return "Unknown error from booking server.";
@@ -782,10 +820,17 @@ ${listing.site.site_url}`;
           statusEl.textContent = "Please choose a date and time.";
           return;
         }
+        const emailVal = document.getElementById("bookingEmail").value.trim();
+        const phoneVal = document.getElementById("bookingPhone").value.trim();
+        const contactCheck = validateBookingEmailOrPhone(emailVal, phoneVal);
+        if (!contactCheck.ok) {
+          statusEl.textContent = contactCheck.message;
+          return;
+        }
         const payload = {
           name: document.getElementById("bookingName").value.trim(),
-          email: document.getElementById("bookingEmail").value.trim(),
-          phone: document.getElementById("bookingPhone").value.trim(),
+          email: emailVal,
+          phone: phoneVal,
           showingDate: dateIsoInput.value,
           showingTime: timeLabelInput.value,
           moveInPreference: document.getElementById("bookingMoveIn").value.trim()

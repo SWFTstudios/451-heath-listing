@@ -46,8 +46,36 @@ export default {
     const showingTime = String(body.showingTime || "").trim();
     const moveInPreference = String(body.moveInPreference || "").trim();
 
-    if (!name || !email || !phone || !showingDate || !showingTime || !moveInPreference) {
+    if (!name || !showingDate || !showingTime || !moveInPreference) {
       return new Response(JSON.stringify({ error: "Missing required fields" }), {
+        status: 400,
+        headers: { ...headersBase, "Content-Type": "application/json" },
+      });
+    }
+
+    function isValidEmail(s) {
+      const t = String(s || "").trim();
+      if (!t) {
+        return false;
+      }
+      return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(t);
+    }
+
+    function isValidPhone(s) {
+      return String(s || "").replace(/\D/g, "").length >= 10;
+    }
+
+    let contactErr = null;
+    if (email && !isValidEmail(email)) {
+      contactErr = "Invalid email format";
+    } else if (phone && !isValidPhone(phone)) {
+      contactErr = "Phone must contain at least 10 digits";
+    } else if (!isValidEmail(email) && !isValidPhone(phone)) {
+      contactErr = "Provide a valid email or phone (at least one)";
+    }
+
+    if (contactErr) {
+      return new Response(JSON.stringify({ error: contactErr }), {
         status: 400,
         headers: { ...headersBase, "Content-Type": "application/json" },
       });

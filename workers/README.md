@@ -48,4 +48,4 @@ The Worker is missing **`AIRTABLE_TOKEN`**. From the `workers/` directory run `n
 
 ### Permissions or field errors
 
-Confirm the PAT has **`data.records:write`** on this base, and that table **451 Apt Showing Times** field names match what [`booking-proxy.js`](booking-proxy.js) sends: `Name`, `Email`, `Phone`, `Showing Date`, `Showing Time`, `Move-In Date Preference`, `Status`.
+Confirm the PAT has **`data.records:write`** on this base, and that table **451 Apt Showing Times** field names match what [`booking-proxy.js`](booking-proxy.js) sends: `Name`, `Email`, `Phone`, `Showing Date`, `Showing Time`, `Move-In Date Preference`, `Status`. `Email` and `Phone` may be empty strings when the visitor supplies only the other contact method.
