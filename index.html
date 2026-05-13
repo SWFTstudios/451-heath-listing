@@ -1040,9 +1040,7 @@ ${listing.site.site_url}`;
               showing_date: payload.showingDate,
               showing_time: FORMSUBMIT_SHOWING_TIME,
               move_in_preference: payload.moveInPreference,
-              calendar_error: detail,
-              raw_response: responseText.slice(0, 4000),
-              message: inquiryMsg + `\n\n---\nCalendar/Airtable did not save this request.\n${detail}`
+              message: inquiryMsg
             };
             try {
               await postToFormsubmitAjax(backupUrl, backupBody);
