@@ -638,6 +638,37 @@ ${listing.site.site_url}`;
       return `${y}-${mo}-${day}`;
     }
 
+    function formatBookingProxyError(responseText) {
+      if (!responseText || !String(responseText).trim()) {
+        return "Unknown error from booking server.";
+      }
+      try {
+        const data = JSON.parse(responseText);
+        if (data.error === "Server misconfigured") {
+          return "Server misconfigured (Airtable token missing on the Worker). Ask the site owner to run wrangler secret put AIRTABLE_TOKEN.";
+        }
+        if (data.error === "Missing required fields") {
+          return "Missing required fields.";
+        }
+        if (Array.isArray(data.errors) && data.errors.length > 0) {
+          const e = data.errors[0];
+          if (e.error === "PUBLIC_API_BILLING_LIMIT_EXCEEDED") {
+            return "Airtable API monthly limit reached. The workspace needs a higher plan or to wait until usage resets.";
+          }
+          if (e.error === "INVALID_PERMISSIONS_OR_MODEL_NOT_FOUND") {
+            return "Airtable rejected the request (permissions or wrong base/table). Check the PAT scopes and table ID.";
+          }
+          return e.message || e.error || responseText.slice(0, 240);
+        }
+        if (typeof data.error === "string") {
+          return data.error;
+        }
+      } catch (_) {
+        /* not JSON */
+      }
+      return String(responseText).slice(0, 280);
+    }
+
     function initBookingScheduler() {
       const grid = document.getElementById("bookingDateGrid");
       const slotWrap = document.getElementById("bookingSlotWrap");
@@ -761,46 +792,84 @@ ${listing.site.site_url}`;
         };
         submitBtn.disabled = true;
         submitBtn.textContent = "Sending…";
+        const addr = `${LISTING.property.address_line1}, ${LISTING.property.unit}`;
         try {
-          const response = await fetch(proxyUrl, {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify(payload)
-          });
-          const responseText = await response.text();
-          if (!response.ok) {
-            throw new Error(responseText || response.statusText);
-          }
-          const addr = `${LISTING.property.address_line1}, ${LISTING.property.unit}`;
+          let responseText = "";
+          let responseOk = false;
           try {
-            await postToFormsubmit({
-              _subject: `Showing request - ${addr} - ${payload.showingDate} ${payload.showingTime}`,
-              name: payload.name,
-              email: payload.email,
-              phone: payload.phone,
-              showing_date: payload.showingDate,
-              showing_time: payload.showingTime,
-              move_in_preference: payload.moveInPreference,
-              message: `Showing request for ${addr}. Date: ${payload.showingDate}. Time: ${payload.showingTime}. Move-in preference: ${payload.moveInPreference}.`
+            const response = await fetch(proxyUrl, {
+              method: "POST",
+              headers: { "Content-Type": "application/json" },
+              body: JSON.stringify(payload),
+              mode: "cors"
             });
-          } catch (_) {
-            /* Airtable saved; FormSubmit email is best-effort */
+            responseText = await response.text();
+            responseOk = response.ok;
+          } catch (netErr) {
+            responseText = netErr && netErr.message ? netErr.message : "Network error";
           }
-          statusEl.textContent = "Requested. We'll confirm your showing soon.";
-          form.reset();
-          dateIsoInput.value = "";
-          timeLabelInput.value = "";
-          if (selectedSlotBtn) {
-            selectedSlotBtn.classList.remove("selected");
+
+          function resetBookingFormUi() {
+            form.reset();
+            dateIsoInput.value = "";
+            timeLabelInput.value = "";
+            if (selectedSlotBtn) {
+              selectedSlotBtn.classList.remove("selected");
+            }
+            if (selectedDateBtn) {
+              selectedDateBtn.classList.remove("selected");
+            }
+            selectedSlotBtn = null;
+            selectedDateBtn = null;
+            selectedDate = null;
+            slotWrap.innerHTML = "";
+            slotHint.textContent = "Select a date first.";
           }
-          if (selectedDateBtn) {
-            selectedDateBtn.classList.remove("selected");
+
+          if (responseOk) {
+            try {
+              await postToFormsubmit({
+                _subject: `Showing request - ${addr} - ${payload.showingDate} ${payload.showingTime}`,
+                name: payload.name,
+                email: payload.email,
+                phone: payload.phone,
+                showing_date: payload.showingDate,
+                showing_time: payload.showingTime,
+                move_in_preference: payload.moveInPreference,
+                message: `Showing request for ${addr}. Date: ${payload.showingDate}. Time: ${payload.showingTime}. Move-in preference: ${payload.moveInPreference}.`
+              });
+            } catch (_) {
+              /* Airtable saved; FormSubmit email is best-effort */
+            }
+            statusEl.textContent = "Requested. We'll confirm your showing soon.";
+            resetBookingFormUi();
+          } else {
+            const detail = formatBookingProxyError(responseText);
+            try {
+              await postToFormsubmit({
+                _subject: `[Showing request - calendar did not save] ${addr} - ${payload.showingDate} ${payload.showingTime}`,
+                name: payload.name,
+                email: payload.email,
+                phone: payload.phone,
+                showing_date: payload.showingDate,
+                showing_time: payload.showingTime,
+                move_in_preference: payload.moveInPreference,
+                calendar_error: detail,
+                raw_response: responseText.slice(0, 4000),
+                message: `Calendar/Airtable save failed.\n${detail}\n\nProperty: ${addr}\nDate: ${payload.showingDate}\nTime: ${payload.showingTime}\nMove-in: ${payload.moveInPreference}`
+              });
+              statusEl.textContent =
+                "The booking calendar could not save this slot (" +
+                detail +
+                "). Your request was emailed to us and we will follow up.";
+              resetBookingFormUi();
+            } catch {
+              statusEl.textContent =
+                "Could not save your request (" +
+                detail +
+                "). Please use Get in Touch below.";
+            }
           }
-          selectedSlotBtn = null;
-          selectedDateBtn = null;
-          selectedDate = null;
-          slotWrap.innerHTML = "";
-          slotHint.textContent = "Select a date first.";
         } catch (err) {
           statusEl.textContent = "Could not save your request. Try again or use Get in Touch.";
         } finally {

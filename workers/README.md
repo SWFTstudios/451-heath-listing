@@ -33,3 +33,19 @@ python3 build.py --data listings/451-heath.json --assets images --style cream-mo
 | `AIRTABLE_TOKEN` | Wrangler secret |
 | `AIRTABLE_BASE_ID` | `wrangler.toml` `[vars]` (matches listing JSON) |
 | `AIRTABLE_TABLE_ID` | `wrangler.toml` `[vars]` — table **451 Apt Showing Times** |
+
+## Troubleshooting
+
+### `PUBLIC_API_BILLING_LIMIT_EXCEEDED` (HTTP 429)
+
+The Worker is working, but **Airtable** is refusing new writes because the workspace hit its **monthly API limit** (common on free or low tiers). Upgrade the Airtable plan, wait for the billing period to reset, or reduce API usage elsewhere. Check usage under **Airtable workspace settings**.
+
+The listing page **emails you via FormSubmit** when the calendar save fails, so showing requests are not silently lost.
+
+### `Server misconfigured`
+
+The Worker is missing **`AIRTABLE_TOKEN`**. From the `workers/` directory run `npx wrangler secret put AIRTABLE_TOKEN`, then `npx wrangler deploy`.
+
+### Permissions or field errors
+
+Confirm the PAT has **`data.records:write`** on this base, and that table **451 Apt Showing Times** field names match what [`booking-proxy.js`](booking-proxy.js) sends: `Name`, `Email`, `Phone`, `Showing Date`, `Showing Time`, `Move-In Date Preference`, `Status`.
