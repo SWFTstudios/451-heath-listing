@@ -40,7 +40,7 @@ python3 build.py --data listings/451-heath.json --assets images --style cream-mo
 
 The Worker is working, but **Airtable** is refusing new writes because the workspace hit its **monthly API limit** (common on free or low tiers). Upgrade the Airtable plan, wait for the billing period to reset, or reduce API usage elsewhere. Check usage under **Airtable workspace settings**.
 
-The listing page **emails you via FormSubmit** when the calendar save fails, so showing requests are not silently lost.
+The listing page **POSTs a backup copy to FormSubmit** (`https://formsubmit.co/ajax/…` using `site.booking_backup_email`, or `lead_email` if unset) when the Worker/Airtable save fails. The UI only shows “Your message was sent…” after FormSubmit returns a successful JSON response; if that backup fails too, the visitor is asked to use **Get in Touch**.
 
 ### `Server misconfigured`
 

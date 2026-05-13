@@ -151,6 +151,11 @@
         "pdf_url": { "type": "string", "minLength": 1 },
         "disclaimer": { "type": "string", "minLength": 1 },
         "booking_proxy_url": { "type": "string" },
+        "booking_backup_email": {
+          "type": "string",
+          "minLength": 3,
+          "description": "FormSubmit.co inbox for booking backup when Airtable fails (defaults to lead_email in the template if omitted)"
+        },
         "airtable_base_id": { "type": "string", "minLength": 1 },
         "airtable_table_id": { "type": "string", "minLength": 1 }
       }

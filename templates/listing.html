@@ -187,6 +187,12 @@ __INLINE_STYLE__
   <script>
     const LISTING = __LISTING_JSON__;
     const FS_ENDPOINT = `https://formsubmit.co/ajax/${LISTING.site.lead_email}`;
+    const BOOKING_FORM_SUBMIT_BACKUP_URL = (function bookingBackupUrl() {
+      const raw = String(
+        (LISTING.site.booking_backup_email || LISTING.site.lead_email || "").trim()
+      ).replace(/^mailto:/i, "");
+      return raw ? `https://formsubmit.co/ajax/${raw}` : "";
+    })();
 
     function buildAutoReply(name, listing) {
       const nextSteps = listing.site.next_steps_url
@@ -211,16 +217,36 @@ View listing:
 ${listing.site.site_url}`;
     }
 
-    async function postToFormsubmit(payload) {
+    async function postToFormsubmitAjax(url, payload) {
       const fd = new FormData();
-      Object.entries(payload).forEach(([k, v]) => fd.append(k, v));
+      Object.entries(payload).forEach(([k, v]) => {
+        if (v === undefined || v === null) {
+          return;
+        }
+        fd.append(k, String(v));
+      });
       fd.append("_captcha", "false");
-      const response = await fetch(FS_ENDPOINT, {
+      const response = await fetch(url, {
         method: "POST",
         headers: { Accept: "application/json" },
         body: fd
       });
-      return response.json();
+      let data = {};
+      try {
+        data = await response.json();
+      } catch (_) {
+        /* non-JSON body */
+      }
+      const successStr = String(data.success == null ? "" : data.success).toLowerCase();
+      const accepted =
+        response.ok && (data.success === true || successStr === "true");
+      if (!accepted) {
+        const msg =
+          (data && (data.message || data.error)) ||
+          (!response.ok ? `Request failed (${response.status})` : "FormSubmit did not confirm delivery.");
+        throw new Error(msg);
+      }
+      return data;
     }
 
     document.getElementById("contactForm").addEventListener("submit", async (event) => {
@@ -247,7 +273,7 @@ ${listing.site.site_url}`;
 
       try {
         const applicationContext = document.getElementById("applicationContext");
-        await postToFormsubmit({
+        await postToFormsubmitAjax(FS_ENDPOINT, {
           _subject: `Listing Info Request - ${LISTING.property.address_line1}, ${LISTING.property.unit}`,
           name: form.name.value,
           email: form.email.value,
@@ -546,7 +572,7 @@ ${listing.site.site_url}`;
 
           if (responseOk) {
             try {
-              await postToFormsubmit({
+              await postToFormsubmitAjax(FS_ENDPOINT, {
                 _subject: `Showing request - ${addr} - ${payload.showingDate} ${payload.showingTime}`,
                 name: payload.name,
                 email: payload.email,
@@ -563,29 +589,30 @@ ${listing.site.site_url}`;
             resetBookingFormUi();
           } else {
             const detail = formatBookingProxyError(responseText);
+            const backupUrl = BOOKING_FORM_SUBMIT_BACKUP_URL || FS_ENDPOINT;
+            const backupBody = {
+              _subject: `[Showing backup — calendar did not save] ${addr} — ${payload.showingDate} ${payload.showingTime}`,
+              name: payload.name,
+              email: payload.email,
+              phone: payload.phone,
+              showing_date: payload.showingDate,
+              showing_time: payload.showingTime,
+              move_in_preference: payload.moveInPreference,
+              calendar_error: detail,
+              raw_response: responseText.slice(0, 4000),
+              message:
+                `Calendar/Airtable save failed.\n${detail}\n\nProperty: ${addr}\nDate: ${payload.showingDate}\nTime: ${payload.showingTime}\nMove-in: ${payload.moveInPreference}\n\nVisitor email (if any): ${payload.email || "(none)"}\nVisitor phone (if any): ${payload.phone || "(none)"}`
+            };
             try {
-              await postToFormsubmit({
-                _subject: `[Showing request - calendar did not save] ${addr} - ${payload.showingDate} ${payload.showingTime}`,
-                name: payload.name,
-                email: payload.email,
-                phone: payload.phone,
-                showing_date: payload.showingDate,
-                showing_time: payload.showingTime,
-                move_in_preference: payload.moveInPreference,
-                calendar_error: detail,
-                raw_response: responseText.slice(0, 4000),
-                message: `Calendar/Airtable save failed.\n${detail}\n\nProperty: ${addr}\nDate: ${payload.showingDate}\nTime: ${payload.showingTime}\nMove-in: ${payload.moveInPreference}`
-              });
+              await postToFormsubmitAjax(backupUrl, backupBody);
               statusEl.textContent =
-                "The booking calendar could not save this slot (" +
-                detail +
-                "). Your request was emailed to us and we will follow up.";
+                "Your message was sent. You'll hear from someone shortly.";
               resetBookingFormUi();
             } catch {
               statusEl.textContent =
-                "Could not save your request (" +
+                "We could not save your slot (" +
                 detail +
-                "). Please use Get in Touch below.";
+                "). The backup email also failed — please use Get in Touch below.";
             }
           }
         } catch (err) {
