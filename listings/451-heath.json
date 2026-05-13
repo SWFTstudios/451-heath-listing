@@ -114,15 +114,13 @@
     "office_address": "50 Broadway, Hillsdale, NJ 07642",
     "mobile": "(201) 280-6333",
     "office": "(201) 599-1100",
-    "profile_url": "https://www.realtor.com/realestateagents/5673e76b89a689010069dbc1"
+    "profile_url": "https://www.realtor.com/realestateagents/5673e76b89a689010069dbc1",
+    "contact_email": ""
   },
   "site": {
     "lead_email": "elombe@swftstudios.com",
     "booking_backup_email": "elombe@swftstudios.com",
     "showing_inquiry_property_phrase": "451 Heath Pl Apt 2",
-    "booking_earliest_slot_minutes_by_date": {
-      "2026-05-13": 960
-    },
     "next_steps_url": "https://drive.google.com/file/d/1NwJDSIv0h8e-ZndqL5YvrEXStECKfalr/view?usp=sharing",
     "booking_proxy_url": "https://451-heath-booking-proxy.elombe.workers.dev",
     "airtable_base_id": "appx3jGQIAp1lzwW0",

@@ -111,31 +111,26 @@ __INLINE_STYLE__
   <section id="schedule-showing">
     <div class="container">
       <p class="eyebrow">Book a Showing</p>
-      <h2>Pick a Date &amp; Time</h2>
-      <p class="booking-lede">Tours with lock-box access, 9am–7pm daily — 30-minute slots. Your realtor can meet prospects on site during these windows.</p>
+      <h2>Pick a day to visit</h2>
+      <p class="booking-lede">Choose a day that works for you. We will email to confirm we received your request. Showing <strong>times</strong> are set directly with Roosevelt Hall—after you submit, his phone and email appear below so you can schedule the exact time.</p>
       <div id="bookingSchedule" class="booking-layout reveal">
         <div class="booking-calendar-card card">
           <p class="field-label">1. Choose a date</p>
           <div id="bookingDateGrid" class="booking-date-grid" role="group" aria-label="Available dates"></div>
         </div>
-        <div class="booking-slots-card card">
-          <p class="field-label">2. Choose a time (local)</p>
-          <p id="bookingSlotHint" class="booking-hint">Select a date first.</p>
-          <div id="bookingSlotWrap" class="booking-slot-grid" role="group" aria-label="Time slots"></div>
-        </div>
         <div class="booking-form-card card">
-          <p class="field-label">3. Your details</p>
+          <p class="field-label">2. Your details</p>
+          <p id="bookingDateHint" class="booking-hint">Select a date on the calendar.</p>
           <form id="bookingForm">
             <input type="text" id="bookingName" name="booking_name" placeholder="Your name" required autocomplete="name" />
-            <p class="field-hint">Email and phone are optional, but enter at least one valid email or a phone number with at least 10 digits.</p>
-            <input type="email" id="bookingEmail" name="booking_email" placeholder="Email (optional)" autocomplete="email" />
-            <input type="tel" id="bookingPhone" name="booking_phone" placeholder="Phone (optional)" autocomplete="tel" />
-            <input type="text" id="bookingMoveIn" name="move_in_preference" placeholder="Move-in: June 1st or sooner (add your preferred date)" required />
+            <input type="email" id="bookingEmail" name="booking_email" placeholder="Email" required autocomplete="email" />
+            <input type="tel" id="bookingPhone" name="booking_phone" placeholder="Phone (at least 10 digits)" required autocomplete="tel" />
+            <input type="text" id="bookingMoveIn" name="move_in_preference" placeholder="Preferred move-in date (e.g. June 1 or sooner)" required />
             <input type="hidden" id="bookingDateIso" name="showing_date_iso" value="" />
-            <input type="hidden" id="bookingTimeLabel" name="showing_time_label" value="" />
-            <button type="submit" class="btn btn-dark" id="bookingSubmitBtn">Request this slot</button>
+            <button type="submit" class="btn btn-dark" id="bookingSubmitBtn">Submit day request</button>
             <p id="bookingProxyNote" class="booking-proxy-note hidden"></p>
-            <p id="bookingStatus" class="booking-status" role="status"></p>
+            <p id="bookingStatus" class="booking-status" role="status" aria-live="polite"></p>
+            <div id="bookingAgentFollowup" class="booking-agent-followup hidden" aria-live="polite"></div>
           </form>
         </div>
       </div>
@@ -373,38 +368,6 @@ ${listing.site.site_url}`;
     document.getElementById("searchingWithRealtor").addEventListener("change", toggleRealtorContactFields);
     document.getElementById("iAmRealtor").addEventListener("change", toggleRealtorContactFields);
 
-    const BOOKING_SLOT_MINUTES = (function buildSlots() {
-      const out = [];
-      for (let m = 9 * 60; m <= 18 * 60 + 30; m += 30) {
-        out.push(m);
-      }
-      return out;
-    })();
-    const BOOKING_DAY_START_MINUTES = 9 * 60;
-    const BOOKING_DAY_END_MINUTES = 18 * 60 + 30;
-
-    function getEarliestSlotMinutesForDate(iso) {
-      const map = LISTING.site && LISTING.site.booking_earliest_slot_minutes_by_date;
-      if (!map || typeof map !== "object") {
-        return BOOKING_DAY_START_MINUTES;
-      }
-      const raw = map[iso];
-      if (typeof raw !== "number" || Number.isNaN(raw)) {
-        return BOOKING_DAY_START_MINUTES;
-      }
-      return Math.min(
-        Math.max(Math.floor(raw), BOOKING_DAY_START_MINUTES),
-        BOOKING_DAY_END_MINUTES
-      );
-    }
-
-    function formatSlotLabel(totalMinutes) {
-      const h = Math.floor(totalMinutes / 60);
-      const mm = totalMinutes % 60;
-      const d = new Date(2000, 0, 1, h, mm);
-      return d.toLocaleTimeString(undefined, { hour: "numeric", minute: "2-digit" });
-    }
-
     function isoDateLocal(d) {
       const y = d.getFullYear();
       const mo = String(d.getMonth() + 1).padStart(2, "0");
@@ -425,26 +388,14 @@ ${listing.site.site_url}`;
       return digits.length >= 10;
     }
 
-    function validateBookingEmailOrPhone(email, phone) {
+    function validateBookingContactRequired(email, phone) {
       const e = String(email).trim();
       const p = String(phone).trim();
-      if (e && !isValidBookingEmail(e)) {
-        return {
-          ok: false,
-          message: "Please enter a valid email, or clear that field and use phone only."
-        };
+      if (!isValidBookingEmail(e)) {
+        return { ok: false, message: "Please enter a valid email address." };
       }
-      if (p && !isValidBookingPhone(p)) {
-        return {
-          ok: false,
-          message: "Please enter a valid phone number (at least 10 digits), or clear it and use email only."
-        };
-      }
-      if (!isValidBookingEmail(e) && !isValidBookingPhone(p)) {
-        return {
-          ok: false,
-          message: "Please enter a valid email or phone number (at least one is required)."
-        };
+      if (!isValidBookingPhone(p)) {
+        return { ok: false, message: "Please enter a valid phone number (at least 10 digits)." };
       }
       return { ok: true };
     }
@@ -516,11 +467,13 @@ ${listing.site.site_url}`;
       const who = String(payload.name || "").trim() || "A prospect";
       const property = bookingFormsubmitPropertyPhrase(listing);
       const datePart = formatShowingDateLong(payload.showingDate) || payload.showingDate || "(date not set)";
-      const timePart = String(payload.showingTime || "").trim() || "(time not set)";
       const phoneLine = String(payload.phone || "").trim() || "—";
       const emailLine = String(payload.email || "").trim() || "—";
+      const moveIn = String(payload.moveInPreference || "").trim() || "—";
       return (
-        `${who} would like to see ${property} on ${datePart} and ${timePart}.\n\n` +
+        `${who} requested a preferred showing day for ${property}.\n` +
+        `Preferred day: ${datePart}.\n` +
+        `Move-in preference: ${moveIn}.\n\n` +
         `You can reach them at:\n` +
         `Phone: ${phoneLine}\n` +
         `Email: ${emailLine}`
@@ -529,21 +482,62 @@ ${listing.site.site_url}`;
 
     function bookingFormsubmitSubject(name) {
       const n = String(name || "").trim() || "Unknown";
-      return `451 Apt Showing Inquiry from ${n}`;
+      return `451 Apt Showing day request from ${n}`;
+    }
+
+    function escapeHtml(s) {
+      return String(s)
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;");
+    }
+
+    function digitsForTel(s) {
+      return String(s || "").replace(/\D/g, "");
+    }
+
+    function renderBookingAgentFollowup(el) {
+      if (!el) {
+        return;
+      }
+      const a = LISTING.agent;
+      if (!a) {
+        return;
+      }
+      const mobileDigits = digitsForTel(a.mobile);
+      const phoneInner = mobileDigits
+        ? `<a href="tel:${escapeHtml(mobileDigits)}">${escapeHtml(a.mobile)}</a>`
+        : escapeHtml(a.mobile);
+      const emailTrim = String(a.contact_email || "").trim();
+      let emailBlock = "";
+      if (emailTrim) {
+        emailBlock =
+          `<p style="margin:0.6em 0 0"><strong>Email:</strong> <a href="mailto:${escapeHtml(emailTrim)}">${escapeHtml(emailTrim)}</a></p>`;
+      } else if (a.profile_url) {
+        emailBlock =
+          `<p style="margin:0.6em 0 0"><strong>Email:</strong> use the contact options on ` +
+          `<a href="${escapeHtml(a.profile_url)}" target="_blank" rel="noopener noreferrer">Roosevelt&rsquo;s Realtor.com profile</a>.</p>`;
+      }
+      el.innerHTML =
+        `<p class="agent-name">${escapeHtml(a.name)}</p>` +
+        `<p style="margin:0.35em 0 0;font-size:0.88rem">To schedule your <strong>showing time</strong> for that day, contact Roosevelt directly:</p>` +
+        `<p style="margin:0.6em 0 0"><strong>Phone:</strong> ${phoneInner}</p>` +
+        emailBlock;
+      el.classList.remove("hidden");
     }
 
     function initBookingScheduler() {
       const grid = document.getElementById("bookingDateGrid");
-      const slotWrap = document.getElementById("bookingSlotWrap");
-      const slotHint = document.getElementById("bookingSlotHint");
       const form = document.getElementById("bookingForm");
       const statusEl = document.getElementById("bookingStatus");
       const proxyNote = document.getElementById("bookingProxyNote");
       const dateIsoInput = document.getElementById("bookingDateIso");
-      const timeLabelInput = document.getElementById("bookingTimeLabel");
+      const dateHint = document.getElementById("bookingDateHint");
       const submitBtn = document.getElementById("bookingSubmitBtn");
+      const agentFollowup = document.getElementById("bookingAgentFollowup");
 
-      if (!grid || !form || !slotWrap || !slotHint) {
+      if (!grid || !form || !dateHint) {
         return;
       }
 
@@ -551,11 +545,13 @@ ${listing.site.site_url}`;
         ? String(LISTING.site.booking_proxy_url).trim()
         : "";
 
+      const FORMSUBMIT_SHOWING_TIME = "Day only (coordinate time with agent)";
+
       if (!proxyUrl) {
         if (proxyNote) {
           proxyNote.classList.remove("hidden");
           proxyNote.textContent =
-            "Once the booking endpoint is deployed, requests save to Airtable automatically. Until then, use Get in Touch below — showings are generally available 9am–7pm daily (30-minute slots).";
+            "Once the booking endpoint is deployed, requests save automatically. Until then, use Get in Touch below.";
         }
         if (submitBtn) {
           submitBtn.disabled = true;
@@ -574,40 +570,7 @@ ${listing.site.site_url}`;
       });
 
       let selectedDateBtn = null;
-      let selectedSlotBtn = null;
       let selectedDate = null;
-
-      function renderSlots() {
-        slotWrap.innerHTML = "";
-        if (!selectedDate) {
-          return;
-        }
-        const earliest = getEarliestSlotMinutesForDate(selectedDate);
-        BOOKING_SLOT_MINUTES.forEach((mins) => {
-          if (mins < earliest) {
-            return;
-          }
-          const label = formatSlotLabel(mins);
-          const b = document.createElement("button");
-          b.type = "button";
-          b.className = "booking-slot-btn";
-          b.textContent = label;
-          b.addEventListener("click", () => {
-            if (selectedSlotBtn) {
-              selectedSlotBtn.classList.remove("selected");
-            }
-            b.classList.add("selected");
-            selectedSlotBtn = b;
-            timeLabelInput.value = label;
-          });
-          slotWrap.appendChild(b);
-        });
-        if (earliest > BOOKING_DAY_START_MINUTES) {
-          slotHint.textContent = `Times for ${selectedDate} — first slot ${formatSlotLabel(earliest)}`;
-        } else {
-          slotHint.textContent = `Times for ${selectedDate}`;
-        }
-      }
 
       const blockedDates = new Set();
 
@@ -632,12 +595,13 @@ ${listing.site.site_url}`;
           selectedDateBtn = btn;
           selectedDate = btn.dataset.iso;
           dateIsoInput.value = selectedDate;
-          if (selectedSlotBtn) {
-            selectedSlotBtn.classList.remove("selected");
+          if (agentFollowup) {
+            agentFollowup.classList.add("hidden");
           }
-          selectedSlotBtn = null;
-          timeLabelInput.value = "";
-          renderSlots();
+          const pretty = formatShowingDateLong(selectedDate);
+          dateHint.textContent = pretty
+            ? `Preferred showing day: ${pretty}`
+            : `Preferred day: ${selectedDate}`;
         });
         grid.appendChild(btn);
       }
@@ -649,13 +613,13 @@ ${listing.site.site_url}`;
           statusEl.textContent = "Booking backend not configured yet.";
           return;
         }
-        if (!dateIsoInput.value || !timeLabelInput.value) {
-          statusEl.textContent = "Please choose a date and time.";
+        if (!dateIsoInput.value) {
+          statusEl.textContent = "Please choose a date on the calendar.";
           return;
         }
         const emailVal = document.getElementById("bookingEmail").value.trim();
         const phoneVal = document.getElementById("bookingPhone").value.trim();
-        const contactCheck = validateBookingEmailOrPhone(emailVal, phoneVal);
+        const contactCheck = validateBookingContactRequired(emailVal, phoneVal);
         if (!contactCheck.ok) {
           statusEl.textContent = contactCheck.message;
           return;
@@ -665,9 +629,13 @@ ${listing.site.site_url}`;
           email: emailVal,
           phone: phoneVal,
           showingDate: dateIsoInput.value,
-          showingTime: timeLabelInput.value,
+          showingTime: "",
           moveInPreference: document.getElementById("bookingMoveIn").value.trim()
         };
+        if (!payload.moveInPreference) {
+          statusEl.textContent = "Please add your preferred move-in timing.";
+          return;
+        }
         submitBtn.disabled = true;
         submitBtn.textContent = "Sending…";
         try {
@@ -689,69 +657,59 @@ ${listing.site.site_url}`;
           function resetBookingFormUi() {
             form.reset();
             dateIsoInput.value = "";
-            timeLabelInput.value = "";
-            if (selectedSlotBtn) {
-              selectedSlotBtn.classList.remove("selected");
-            }
             if (selectedDateBtn) {
               selectedDateBtn.classList.remove("selected");
             }
-            selectedSlotBtn = null;
             selectedDateBtn = null;
             selectedDate = null;
-            slotWrap.innerHTML = "";
-            slotHint.textContent = "Select a date first.";
+            dateHint.textContent = "Select a date on the calendar.";
           }
+
+          const inquiryMsg = buildBookingFormsubmitMessage(LISTING, payload);
 
           if (responseOk) {
             try {
-              const inquiryMsg = buildBookingFormsubmitMessage(LISTING, payload);
-              const moveIn = String(payload.moveInPreference || "").trim();
               await postToFormsubmitAjax(FS_ENDPOINT, {
                 _subject: bookingFormsubmitSubject(payload.name),
                 name: payload.name,
                 email: payload.email,
                 phone: payload.phone,
                 showing_date: payload.showingDate,
-                showing_time: payload.showingTime,
+                showing_time: FORMSUBMIT_SHOWING_TIME,
                 move_in_preference: payload.moveInPreference,
-                message:
-                  inquiryMsg +
-                  (moveIn ? `\n\nMove-in preference: ${moveIn}` : "")
+                message: inquiryMsg
               });
             } catch (_) {
               /* Airtable saved; FormSubmit email is best-effort */
             }
-            statusEl.textContent = "Requested. We'll confirm your showing soon.";
+            statusEl.textContent =
+              "Your message was sent. You'll hear from someone shortly.";
+            renderBookingAgentFollowup(agentFollowup);
             resetBookingFormUi();
           } else {
             const detail = formatBookingProxyError(responseText);
             const backupUrl = BOOKING_FORM_SUBMIT_BACKUP_URL || FS_ENDPOINT;
-            const inquiryMsg = buildBookingFormsubmitMessage(LISTING, payload);
-            const moveIn = String(payload.moveInPreference || "").trim();
             const backupBody = {
               _subject: bookingFormsubmitSubject(payload.name),
               name: payload.name,
               email: payload.email,
               phone: payload.phone,
               showing_date: payload.showingDate,
-              showing_time: payload.showingTime,
+              showing_time: FORMSUBMIT_SHOWING_TIME,
               move_in_preference: payload.moveInPreference,
               calendar_error: detail,
               raw_response: responseText.slice(0, 4000),
-              message:
-                inquiryMsg +
-                (moveIn ? `\n\nMove-in preference: ${moveIn}` : "") +
-                `\n\n---\nCalendar/Airtable did not save this request.\n${detail}`
+              message: inquiryMsg + `\n\n---\nCalendar/Airtable did not save this request.\n${detail}`
             };
             try {
               await postToFormsubmitAjax(backupUrl, backupBody);
               statusEl.textContent =
                 "Your message was sent. You'll hear from someone shortly.";
+              renderBookingAgentFollowup(agentFollowup);
               resetBookingFormUi();
             } catch {
               statusEl.textContent =
-                "We could not save your slot (" +
+                "We could not save your request (" +
                 detail +
                 "). The backup email also failed — please use Get in Touch below.";
             }
@@ -760,7 +718,7 @@ ${listing.site.site_url}`;
           statusEl.textContent = "Could not save your request. Try again or use Get in Touch.";
         } finally {
           submitBtn.disabled = !proxyUrl;
-          submitBtn.textContent = "Request this slot";
+          submitBtn.textContent = "Submit day request";
         }
       });
     }

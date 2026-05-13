@@ -4,6 +4,8 @@
  * Vars: AIRTABLE_BASE_ID, AIRTABLE_TABLE_ID (see wrangler.toml)
  */
 
+const SHOWING_TIME_PLACEHOLDER = "Coordinate time with listing agent";
+
 function corsHeaders(request) {
   const origin = request.headers.get("Origin") || "*";
   return {
@@ -43,10 +45,11 @@ export default {
     const email = String(body.email || "").trim();
     const phone = String(body.phone || "").trim();
     const showingDate = String(body.showingDate || "").trim();
-    const showingTime = String(body.showingTime || "").trim();
     const moveInPreference = String(body.moveInPreference || "").trim();
+    const showingTimeRaw = String(body.showingTime || "").trim();
+    const showingTime = showingTimeRaw || SHOWING_TIME_PLACEHOLDER;
 
-    if (!name || !showingDate || !showingTime || !moveInPreference) {
+    if (!name || !showingDate || !moveInPreference) {
       return new Response(JSON.stringify({ error: "Missing required fields" }), {
         status: 400,
         headers: { ...headersBase, "Content-Type": "application/json" },
@@ -66,12 +69,10 @@ export default {
     }
 
     let contactErr = null;
-    if (email && !isValidEmail(email)) {
-      contactErr = "Invalid email format";
-    } else if (phone && !isValidPhone(phone)) {
-      contactErr = "Phone must contain at least 10 digits";
-    } else if (!isValidEmail(email) && !isValidPhone(phone)) {
-      contactErr = "Provide a valid email or phone (at least one)";
+    if (!isValidEmail(email)) {
+      contactErr = "A valid email is required.";
+    } else if (!isValidPhone(phone)) {
+      contactErr = "A valid phone number (at least 10 digits) is required.";
     }
 
     if (contactErr) {
