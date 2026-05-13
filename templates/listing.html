@@ -380,6 +380,23 @@ ${listing.site.site_url}`;
       }
       return out;
     })();
+    const BOOKING_DAY_START_MINUTES = 9 * 60;
+    const BOOKING_DAY_END_MINUTES = 18 * 60 + 30;
+
+    function getEarliestSlotMinutesForDate(iso) {
+      const map = LISTING.site && LISTING.site.booking_earliest_slot_minutes_by_date;
+      if (!map || typeof map !== "object") {
+        return BOOKING_DAY_START_MINUTES;
+      }
+      const raw = map[iso];
+      if (typeof raw !== "number" || Number.isNaN(raw)) {
+        return BOOKING_DAY_START_MINUTES;
+      }
+      return Math.min(
+        Math.max(Math.floor(raw), BOOKING_DAY_START_MINUTES),
+        BOOKING_DAY_END_MINUTES
+      );
+    }
 
     function formatSlotLabel(totalMinutes) {
       const h = Math.floor(totalMinutes / 60);
@@ -565,7 +582,11 @@ ${listing.site.site_url}`;
         if (!selectedDate) {
           return;
         }
+        const earliest = getEarliestSlotMinutesForDate(selectedDate);
         BOOKING_SLOT_MINUTES.forEach((mins) => {
+          if (mins < earliest) {
+            return;
+          }
           const label = formatSlotLabel(mins);
           const b = document.createElement("button");
           b.type = "button";
@@ -581,6 +602,11 @@ ${listing.site.site_url}`;
           });
           slotWrap.appendChild(b);
         });
+        if (earliest > BOOKING_DAY_START_MINUTES) {
+          slotHint.textContent = `Times for ${selectedDate} — first slot ${formatSlotLabel(earliest)}`;
+        } else {
+          slotHint.textContent = `Times for ${selectedDate}`;
+        }
       }
 
       const blockedDates = new Set();
@@ -612,7 +638,6 @@ ${listing.site.site_url}`;
           selectedSlotBtn = null;
           timeLabelInput.value = "";
           renderSlots();
-          slotHint.textContent = `Times for ${selectedDate}`;
         });
         grid.appendChild(btn);
       }

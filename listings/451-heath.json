@@ -120,6 +120,9 @@
     "lead_email": "elombe@swftstudios.com",
     "booking_backup_email": "elombe@swftstudios.com",
     "showing_inquiry_property_phrase": "451 Heath Pl Apt 2",
+    "booking_earliest_slot_minutes_by_date": {
+      "2026-05-13": 960
+    },
     "next_steps_url": "https://drive.google.com/file/d/1NwJDSIv0h8e-ZndqL5YvrEXStECKfalr/view?usp=sharing",
     "booking_proxy_url": "https://451-heath-booking-proxy.elombe.workers.dev",
     "airtable_base_id": "appx3jGQIAp1lzwW0",
